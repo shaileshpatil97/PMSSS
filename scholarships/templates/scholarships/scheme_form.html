@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2 class="mb-3">{% if object %}Edit Student{% else %}New Student{% endif %}</h2>
+<h2 class="mb-3">{% if object %}Edit Scheme{% else %}New Scheme{% endif %}</h2>
 <form method="post" class="card p-3">
   {% csrf_token %}
   {{ form.as_p }}
   <div class="d-flex gap-2">
     <button class="btn btn-primary" type="submit">Save</button>
-    <a class="btn btn-outline-secondary" role="button" href="{% url 'students:list' %}">Cancel</a>
+    <a class="btn btn-outline-secondary" role="button" href="{% url 'scholarships:scheme_list' %}">Cancel</a>
   </div>
 </form>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Upload Document for Application #{{ view.kwargs.pk }}</h2>
+<form method="post" enctype="multipart/form-data" class="card p-3">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Upload</button>
+    <a class="btn btn-outline-secondary" role="button" href="{% url 'scholarships:application_detail' view.kwargs.pk %}">Back</a>
+  </div>
+</form>
+{% endblock %}

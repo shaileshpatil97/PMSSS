@@ -1,29 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Institutes</h2>
-<p><a role="button" href="{% url 'institutes:create' %}">+ New Institute</a></p>
-<table>
-  <thead>
-    <tr>
-      <th>ID</th><th>Code</th><th>Name</th><th>Admission</th><th>eSuvidha</th><th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for i in institutes %}
-    <tr>
-      <td>{{ i.id }}</td>
-      <td>{{ i.code }}</td>
-      <td>{{ i.name }}</td>
-      <td>{{ i.get_admission_status_display }}</td>
-      <td>{{ i.get_esuvidha_status_display }}</td>
-      <td>
-        <a href="{% url 'institutes:edit' i.pk %}">Edit</a>
-        <a href="{% url 'institutes:delete' i.pk %}">Delete</a>
-      </td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="6">No institutes yet.</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Institutes</h2>
+  <a class="btn btn-primary" role="button" href="{% url 'institutes:create' %}">+ New Institute</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th><th>Code</th><th>Name</th><th>Admission</th><th>eSuvidha</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in institutes %}
+      <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.code }}</td>
+        <td>{{ i.name }}</td>
+        <td>{{ i.get_admission_status_display }}</td>
+        <td>{{ i.get_esuvidha_status_display }}</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'institutes:edit' i.pk %}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'institutes:delete' i.pk %}">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6" class="text-center text-muted">No institutes yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

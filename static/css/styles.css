@@ -1,0 +1,7 @@
+/* Custom styles for the portal */
+.table { font-size: 0.95rem; }
+.btn { border-radius: .4rem; }
+.card { border-radius: .6rem; }
+.stepper .step { opacity: .65; }
+.stepper .step.active { opacity: 1; }
+.navbar .nav-link.active, .navbar .nav-link:hover { text-decoration: underline; text-underline-offset: 3px; }

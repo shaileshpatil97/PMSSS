@@ -1,28 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Finance Records</h2>
-<p><a role="button" href="{% url 'finance:create' %}">+ New Record</a></p>
-<table>
-  <thead>
-    <tr>
-      <th>ID</th><th>Student</th><th>Amount</th><th>Status</th><th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for r in records %}
-    <tr>
-      <td>{{ r.id }}</td>
-      <td>{{ r.student_name }}</td>
-      <td>{{ r.amount }}</td>
-      <td>{{ r.get_status_display }}</td>
-      <td>
-        <a href="{% url 'finance:edit' r.pk %}">Edit</a>
-        <a href="{% url 'finance:delete' r.pk %}">Delete</a>
-      </td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="5">No records yet.</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Finance Records</h2>
+  <a class="btn btn-primary" role="button" href="{% url 'finance:create' %}">+ New Record</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th><th>Student</th><th>Amount</th><th>Status</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for r in records %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.student_name }}</td>
+        <td>₹ {{ r.amount }}</td>
+        <td><span class="badge text-bg-info">{{ r.get_status_display }}</span></td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'finance:edit' r.pk %}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'finance:delete' r.pk %}">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">No records yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

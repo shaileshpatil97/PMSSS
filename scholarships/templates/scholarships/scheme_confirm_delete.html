@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="card p-3">
-  <h2 class="mb-2">Delete Finance Record</h2>
+  <h2 class="mb-2">Delete Scheme</h2>
   <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
   <form method="post" class="d-flex gap-2">
     {% csrf_token %}
     <button class="btn btn-danger" type="submit">Confirm Delete</button>
-    <a class="btn btn-outline-secondary" role="button" href="{% url 'finance:list' %}">Cancel</a>
+    <a class="btn btn-outline-secondary" role="button" href="{% url 'scholarships:scheme_list' %}">Cancel</a>
   </form>
-</div>
+  </div>
 {% endblock %}

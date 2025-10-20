@@ -1,58 +1,37 @@
-# PMSSS Scholarship Portal (Django + MySQL)
+# PMSSS Scholarship Portal (Django)
 
-A minimal full‑stack portal with modules for Students, Institutes, SAG, and Finance Bureau. Includes Django admin, basic templates, and REST CRUD APIs.
+An original, clean, MahaDBT-inspired scholarship portal with modules for Students, Institutes, SAG, Finance, and Scholarships. Includes Django admin, modern Bootstrap UI, and REST-ready APIs.
 
 ## Features
-- Django + DRF APIs under `/api/`
-- Apps: students, institutes, sag, finance
-- Institute has `admission_status` and `esuvidha_status`
-- Basic CRUD UI (list/create/edit/delete)
-- MySQL-ready via `.env` (fallback to SQLite for first run)
+- Modern Bootstrap 5 UI and shared layout
+- Apps: students, institutes, sag, finance, scholarships
+- Application lifecycle views with filters and status badges
+- DRF installed; API routes mounted at `/api/`
+- MySQL-ready via `.env` (falls back to SQLite)
 
-## Setup (Windows, cmd.exe)
+## Run locally (Windows cmd.exe)
 
-1. Create and activate virtualenv (if not already):
+Optional: create and activate a venv first.
+
 ```
 python -m venv .venv
 ".venv\Scripts\activate"
-```
-
-2. Install dependencies:
-```
-pip install -r requirements.txt
-```
-
-3. Create `.env` from example and adjust values (MySQL credentials):
-```
-copy .env.example .env
-```
-
-4. Initialize project (first time only, if code not already generated):
-```
-python -m django --version
-python -m django startproject pmsss_portal .
-```
-
-5. Apply migrations and create superuser:
-```
-python manage.py makemigrations
+python -m pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
-```
-
-6. Run the server:
-```
 python manage.py runserver
 ```
 
-Visit http://127.0.0.1:8000/ and http://127.0.0.1:8000/admin/.
+Then open http://127.0.0.1:8000/ and http://127.0.0.1:8000/admin/.
 
-## Environment
-- Django 5.x
-- DRF 3.15
-- MySQL via PyMySQL (or SQLite by default)
+## Roadmap (MahaDBT-like)
+- Student/citizen login and profile
+- Role dashboards: Institute, Department, Finance
+- OTP login and notifications (email/SMS)
+- Application audit trail and document checklist
+- Payment initiation and disbursement ledger
+- Reports/export (CSV/XLSX)
 
 ## Notes
-- If MySQL is not installed, the project will use SQLite automatically.
-- Update `ALLOWED_HOSTS` if accessing from another device.
-"# PMSSS" 
+- Update `ALLOWED_HOSTS` in production; set `DEBUG=False` and a strong `SECRET_KEY` in `.env`.
+- Static files are served via Django for dev; use `collectstatic` behind a web server in production.

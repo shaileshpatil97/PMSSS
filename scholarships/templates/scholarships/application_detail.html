@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Application #{{ object.id }}</h2>
+  <a class="btn btn-outline-secondary" href="{% url 'scholarships:application_list' %}">Back to applications</a>
+</div>
+
+<div class="card p-3 mb-3">
+  <div class="row">
+    <div class="col-md-6">
+      <p class="mb-1"><strong>Applicant:</strong> {{ object.applicant_name|default:object.student }}</p>
+      <p class="mb-1"><strong>Email:</strong> {{ object.applicant_email }}</p>
+      <p class="mb-1"><strong>Scheme:</strong> {{ object.scheme.name }}</p>
+      <p class="mb-1"><strong>Institute:</strong> {{ object.institute }}</p>
+    </div>
+    <div class="col-md-6">
+      <div class="stepper d-flex">
+        {% with s=object.status %}
+          <div class="step {% if s == 'draft' or s in 'submitted institute_verified department_approved payment_initiated disbursed' %}active{% endif %}">Draft</div>
+          <div class="step {% if s in 'submitted institute_verified department_approved payment_initiated disbursed' %}active{% endif %}">Submitted</div>
+          <div class="step {% if s in 'institute_verified department_approved payment_initiated disbursed' %}active{% endif %}">Institute</div>
+          <div class="step {% if s in 'department_approved payment_initiated disbursed' %}active{% endif %}">Dept</div>
+          <div class="step {% if s in 'payment_initiated disbursed' %}active{% endif %}">Payment</div>
+          <div class="step {% if s == 'disbursed' %}active{% endif %}">Disbursed</div>
+        {% endwith %}
+      </div>
+      <p class="mt-2 mb-0"><span class="badge text-bg-info">{{ object.get_status_display }}</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="card p-3 mb-3">
+  <h5>Actions</h5>
+  <div class="d-flex flex-wrap gap-2">
+    <form method="post" action="/api/applications/{{ object.id }}/submit/">{% csrf_token %}
+      <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+    </form>
+    <form method="post" action="/api/applications/{{ object.id }}/verify_institute/">{% csrf_token %}
+      <button class="btn btn-sm btn-outline-primary" type="submit">Verify Institute</button>
+    </form>
+    <form method="post" action="/api/applications/{{ object.id }}/approve_department/">{% csrf_token %}
+      <button class="btn btn-sm btn-outline-primary" type="submit">Approve Department</button>
+    </form>
+    <form class="d-flex align-items-center gap-2" method="post" action="/api/applications/{{ object.id }}/initiate_payment/">{% csrf_token %}
+      <input class="form-control form-control-sm" style="width:140px" type="number" name="amount" step="0.01" placeholder="Amount" />
+      <button class="btn btn-sm btn-success" type="submit">Initiate Payment</button>
+    </form>
+    <form method="post" action="/api/applications/{{ object.id }}/disburse/">{% csrf_token %}
+      <button class="btn btn-sm btn-success" type="submit">Disburse</button>
+    </form>
+    <form method="post" action="/api/applications/{{ object.id }}/reject/">{% csrf_token %}
+      <button class="btn btn-sm btn-danger" type="submit">Reject</button>
+    </form>
+  </div>
+</div>
+
+<div class="card p-3">
+  <h5>Documents</h5>
+  <ul class="mb-3">
+    {% for d in object.documents.all %}
+    <li>{{ d.doc_type }} - <a href="{{ d.file.url }}">Download</a></li>
+    {% empty %}
+    <li class="text-muted">No documents uploaded.</li>
+    {% endfor %}
+  </ul>
+  <a class="btn btn-sm btn-outline-secondary" href="{% url 'scholarships:application_upload' object.pk %}">Upload Document</a>
+</div>
+{% endblock %}

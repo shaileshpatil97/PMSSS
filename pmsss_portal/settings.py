@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'institutes',
     'sag',
     'finance',
+    'scholarships',
 ]
 
 MIDDLEWARE = [

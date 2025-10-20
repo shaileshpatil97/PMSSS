@@ -4,11 +4,12 @@ from students.api import router as students_router
 from institutes.api import router as institutes_router
 from sag.api import router as sag_router
 from finance.api import router as finance_router
+from scholarships.api import router as scholarships_router
 
 router = DefaultRouter()
 
 # Extend the main router with app-specific routers
-for r in (students_router, institutes_router, sag_router, finance_router):
+for r in (students_router, institutes_router, sag_router, finance_router, scholarships_router):
     for prefix, viewset, basename in getattr(r, 'registry', []):
         router.register(prefix, viewset, basename=basename)
 

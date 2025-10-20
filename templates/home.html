@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-4 mb-4 bg-white rounded shadow-sm">
+  <h1 class="h3 mb-2">Welcome to the Scholarship Portal</h1>
+  <p class="text-muted mb-0">Apply for schemes, track verification, and receive disbursements like MahaDBT.</p>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Apply for Scheme</h5>
+        <p class="card-text">Browse active schemes and start your application online.</p>
+        <a href="/scholarships/schemes/" class="btn btn-primary">View Schemes</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Track Application</h5>
+        <p class="card-text">Track your application across submission, verification, approval, and payment.</p>
+        <a href="/scholarships/applications/" class="btn btn-primary">My Applications</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Institutes & Finance</h5>
+        <p class="card-text">Institute verification and finance disbursement workflows.</p>
+        <a href="/institutes/" class="btn btn-outline-primary">Institutes</a>
+        <a href="/finance/" class="btn btn-outline-secondary">Finance</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

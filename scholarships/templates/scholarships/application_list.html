@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Applications</h2>
+  <a class="btn btn-primary" href="{% url 'scholarships:application_create' %}">+ New Application</a>
+  </div>
+
+<div class="card p-3 mb-3">
+  <form class="row g-2" method="get">
+    <div class="col-md-3">
+      <input class="form-control" name="q" placeholder="Search applicant or email" value="{{ request.GET.q }}" />
+    </div>
+    <div class="col-md-3">
+      <select class="form-select" name="status">
+        <option value="">All Status</option>
+        {% for code,label in applications.model.STATUS_CHOICES %}
+        <option value="{{ code }}" {% if request.GET.status == code %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-outline-secondary" type="submit">Filter</button>
+    </div>
+  </form>
+  <small class="text-muted">Tip: Try filtering by status to mimic MahaDBT tracking views.</small>
+  </div>
+
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>#</th><th>Applicant</th><th>Scheme</th><th>Status</th><th>Updated</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for a in applications %}
+      <tr>
+        <td>{{ a.id }}</td>
+        <td><a href="{% url 'scholarships:application_detail' a.pk %}">{{ a.applicant_name|default:a.student }}</a></td>
+        <td>{{ a.scheme.name }}</td>
+        <td><span class="badge text-bg-info">{{ a.get_status_display }}</span></td>
+        <td>{{ a.updated_at|date:'Y-m-d H:i' }}</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'scholarships:application_edit' a.pk %}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'scholarships:application_delete' a.pk %}">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6" class="text-center text-muted">No applications yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
