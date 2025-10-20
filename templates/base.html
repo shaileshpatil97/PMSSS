@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PMSSS Portal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+</head>
+<body>
+  <main class="container">
+    <nav>
+      <ul>
+        <li><strong>PMSSS Portal</strong></li>
+      </ul>
+      <ul>
+        <li><a href="/">Students</a></li>
+        <li><a href="/institutes/">Institutes</a></li>
+        <li><a href="/sag/">SAG</a></li>
+        <li><a href="/finance/">Finance</a></li>
+        <li><a href="/admin/">Admin</a></li>
+      </ul>
+    </nav>
+    <section>
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Finance Records</h2>
+<p><a role="button" href="{% url 'finance:create' %}">+ New Record</a></p>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th><th>Student</th><th>Amount</th><th>Status</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for r in records %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td>{{ r.student_name }}</td>
+      <td>{{ r.amount }}</td>
+      <td>{{ r.get_status_display }}</td>
+      <td>
+        <a href="{% url 'finance:edit' r.pk %}">Edit</a>
+        <a href="{% url 'finance:delete' r.pk %}">Delete</a>
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5">No records yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
