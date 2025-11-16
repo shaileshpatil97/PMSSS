@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3">
+    <div class="list-group">
+      <a href="{% url 'scholarships:aadhaar_bank_link' %}" class="list-group-item list-group-item-action">Aadhaar Bank Link</a>
+      <a href="{% url 'scholarships:applicant_dashboard' %}" class="list-group-item list-group-item-action">Home</a>
+      <a href="{% url 'scholarships:profile' %}" class="list-group-item list-group-item-action">Profile</a>
+      <a href="{% url 'scholarships:all_schemes' %}" class="list-group-item list-group-item-action">All Schemes</a>
+      <a href="{% url 'scholarships:my_applied_scheme' %}" class="list-group-item list-group-item-action active">My Applied Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">My Cancelled Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">Right To Give Up</a>
+      <a href="{% url 'scholarships:grievance_suggestion' %}" class="list-group-item list-group-item-action">Grievance/Suggestion Dashboard</a>
+      <a href="#" class="list-group-item list-group-item-action">Declaration Forms</a>
+      <a href="#" class="list-group-item list-group-item-action">Notification</a>
+      <a href="{% url 'scholarships:my_applied_scheme_history' %}" class="list-group-item list-group-item-action">My Applied Scheme History</a>
+    </div>
+    
+    <div class="alert alert-warning mt-3">
+      <strong>📘 Click here for Help</strong>
+    </div>
+    
+    <div class="mt-3">
+      <button class="btn btn-outline-primary w-100">💬 Grievance / Suggestions</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-9">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4>Applied Scheme (AY 2025-2026)</h4>
+      <button class="btn btn-warning">Set Schemes Preferences</button>
+    </div>
+
+    <!-- Important Notice -->
+    <div class="alert alert-danger">
+      <strong>Important:</strong>
+      <ul class="mb-0">
+        <li>Once a scheme is selected/applied and if you don't wish to apply that scheme then you can cancel the scheme by yourself (Till Institutional Nodal Officer Approve / Reject application)</li>
+        <li>Once application is approved / rejected by Institutional Nodal Officer then you cannot cancel the scheme.</li>
+        <li>Once a scheme is cancelled then you can apply for another scheme.</li>
+      </ul>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#under_scrutiny">Under Scrutiny Applications</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#approved">Approved Applications</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#rejected">Rejected Applications</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#disbursed">Fund Disbursed</a>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Under Scrutiny Tab -->
+      <div class="tab-pane fade show active" id="under_scrutiny">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Application ID</th>
+                <th>Show Bank Details</th>
+                <th>Department Name</th>
+                <th>Scheme Name</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th>View Form</th>
+                <th>Tentative Benefits</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in under_scrutiny %}
+              <tr>
+                <td>{{ app.id }}</td>
+                <td><a href="#" class="btn btn-sm btn-info">Bank Details</a></td>
+                <td>{{ app.scheme.department }}</td>
+                <td>{{ app.scheme.name }}</td>
+                <td><span class="badge bg-warning">{{ app.get_status_display }}</span></td>
+                <td><button class="btn btn-sm btn-danger">Cancel</button></td>
+                <td><a href="{% url 'scholarships:application_detail' app.pk %}" class="btn btn-sm btn-primary">View</a></td>
+                <td><a href="#" class="btn btn-sm btn-secondary">Benefits</a></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="8" class="text-center text-muted">No applications under scrutiny</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Approved Tab -->
+      <div class="tab-pane fade" id="approved">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Application ID</th>
+                <th>Show Bank Details</th>
+                <th>Department Name</th>
+                <th>Scheme Name</th>
+                <th>Status</th>
+                <th>View Form</th>
+                <th>Tentative Benefits</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in approved %}
+              <tr>
+                <td>{{ app.id }}</td>
+                <td><a href="#" class="btn btn-sm btn-info">Bank Details</a></td>
+                <td>{{ app.scheme.department }}</td>
+                <td>{{ app.scheme.name }}</td>
+                <td><span class="badge bg-success">{{ app.get_status_display }}</span></td>
+                <td><a href="{% url 'scholarships:application_detail' app.pk %}" class="btn btn-sm btn-primary">View</a></td>
+                <td><a href="#" class="btn btn-sm btn-secondary">Benefits</a></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="7" class="text-center text-muted">No approved applications</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rejected Tab -->
+      <div class="tab-pane fade" id="rejected">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Application ID</th>
+                <th>Department Name</th>
+                <th>Scheme Name</th>
+                <th>Status</th>
+                <th>Rejection Reason</th>
+                <th>View Form</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in rejected %}
+              <tr>
+                <td>{{ app.id }}</td>
+                <td>{{ app.scheme.department }}</td>
+                <td>{{ app.scheme.name }}</td>
+                <td><span class="badge bg-danger">{{ app.get_status_display }}</span></td>
+                <td>{{ app.rejection_reason|default:"Not specified" }}</td>
+                <td><a href="{% url 'scholarships:application_detail' app.pk %}" class="btn btn-sm btn-primary">View</a></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center text-muted">No rejected applications</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Fund Disbursed Tab -->
+      <div class="tab-pane fade" id="disbursed">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Application ID</th>
+                <th>Show Bank Details</th>
+                <th>Department Name</th>
+                <th>Scheme Name</th>
+                <th>Status</th>
+                <th>Disbursed Amount</th>
+                <th>View Form</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in disbursed %}
+              <tr>
+                <td>{{ app.id }}</td>
+                <td><a href="#" class="btn btn-sm btn-info">Bank Details</a></td>
+                <td>{{ app.scheme.department }}</td>
+                <td>{{ app.scheme.name }}</td>
+                <td><span class="badge bg-primary">{{ app.get_status_display }}</span></td>
+                <td>₹ --</td>
+                <td><a href="{% url 'scholarships:application_detail' app.pk %}" class="btn btn-sm btn-primary">View</a></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="7" class="text-center text-muted">No disbursed applications</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

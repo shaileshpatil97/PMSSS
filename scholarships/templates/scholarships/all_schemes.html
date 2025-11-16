@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3">
+    <div class="list-group">
+      <a href="{% url 'scholarships:aadhaar_bank_link' %}" class="list-group-item list-group-item-action">Aadhaar Bank Link</a>
+      <a href="{% url 'scholarships:applicant_dashboard' %}" class="list-group-item list-group-item-action">Home</a>
+      <a href="{% url 'scholarships:profile' %}" class="list-group-item list-group-item-action">Profile</a>
+      <a href="{% url 'scholarships:all_schemes' %}" class="list-group-item list-group-item-action active">All Schemes</a>
+      <a href="{% url 'scholarships:my_applied_scheme' %}" class="list-group-item list-group-item-action">My Applied Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">My Cancelled Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">Right To Give Up</a>
+      <a href="{% url 'scholarships:grievance_suggestion' %}" class="list-group-item list-group-item-action">Grievance/Suggestion Dashboard</a>
+      <a href="#" class="list-group-item list-group-item-action">Declaration Forms</a>
+      <a href="#" class="list-group-item list-group-item-action">Notification</a>
+      <a href="{% url 'scholarships:my_applied_scheme_history' %}" class="list-group-item list-group-item-action">My Applied Scheme History</a>
+    </div>
+    
+    <div class="alert alert-warning mt-3">
+      <strong>📘 Click here for Help</strong>
+    </div>
+    
+    <div class="mt-3">
+      <button class="btn btn-outline-primary w-100">💬 Grievance / Suggestions</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-9">
+    <h4 class="mb-3">Schemes (AY 2025-2026)</h4>
+    
+    <div class="card mb-4">
+      <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">Post-Matric Schemes</h5>
+      </div>
+      <div class="card-body">
+        <!-- Filter Form -->
+        <form method="GET" class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label">Department <span class="text-danger">*</span></label>
+            <select name="department" class="form-select">
+              <option value="">--Select--</option>
+              {% for dept in departments %}
+              <option value="{{ dept }}" {% if request.GET.department == dept %}selected{% endif %}>{{ dept }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Scheme Name</label>
+            <select name="scheme_name" class="form-select">
+              <option value="">--Select--</option>
+              {% for scheme in scheme_list %}
+              <option value="{{ scheme.name }}" {% if request.GET.scheme_name == scheme.name %}selected{% endif %}>{{ scheme.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+        </form>
+
+        <!-- Schemes Table -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Scheme Name</th>
+                <th>Department Name</th>
+                <th>Application Start Date</th>
+                <th>Application End Date</th>
+                <th>Take Action</th>
+                <th>Download GRs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scheme in scheme_list %}
+              <tr>
+                <td>{{ scheme.name }}</td>
+                <td>{{ scheme.department }}</td>
+                <td>{{ scheme.start_date|date:"d/m/Y" }}</td>
+                <td>{{ scheme.end_date|date:"d/m/Y" }}</td>
+                <td>
+                  {% if scheme.is_active %}
+                  <a href="{% url 'scholarships:application_create' %}" class="btn btn-sm btn-primary">Apply</a>
+                  {% else %}
+                  <span class="text-muted">Closed</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="#" class="btn btn-sm btn-outline-danger">📄 PDF</a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center text-muted">No schemes found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

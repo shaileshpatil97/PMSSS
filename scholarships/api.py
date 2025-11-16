@@ -3,6 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter
 from django.db import transaction
+from django.shortcuts import redirect
+from decimal import Decimal, InvalidOperation
 from .models import Scheme, Application
 from .serializers import SchemeSerializer, ApplicationSerializer
 from finance.models import FinanceRecord
@@ -22,14 +24,21 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     def _invalid_transition(self, current: str, target: str) -> Response:
         return Response({"detail": f"Invalid transition from {current} to {target}"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=["post"], permission_classes=[permissions.IsAdminUser | permissions.IsAuthenticated])
+    def _maybe_redirect(self, request, app):
+        # If request comes from an HTML form, redirect back to detail page
+        accept = request.META.get('HTTP_ACCEPT', '')
+        if 'text/html' in accept:
+            return redirect(f'/scholarships/applications/{app.pk}/')
+        return Response(self.get_serializer(app).data)
+
+    @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
     def submit(self, request, pk=None):
         app = self.get_object()
         if app.status != 'draft':
             return self._invalid_transition(app.status, 'submitted')
         app.mark_submitted()
         app.save()
-        return Response(self.get_serializer(app).data)
+        return self._maybe_redirect(request, app)
 
     @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
     def verify_institute(self, request, pk=None):
@@ -40,7 +49,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             return self._invalid_transition(app.status, 'institute_verified')
         app.mark_verified()
         app.save()
-        return Response(self.get_serializer(app).data)
+        return self._maybe_redirect(request, app)
 
     @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
     def approve_department(self, request, pk=None):
@@ -51,7 +60,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             return self._invalid_transition(app.status, 'department_approved')
         app.mark_approved()
         app.save()
-        return Response(self.get_serializer(app).data)
+        return self._maybe_redirect(request, app)
 
     @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
     @transaction.atomic
@@ -64,7 +73,11 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         app.mark_payment_initiated()
         app.save()
         # Create a finance record placeholder
-        amount = request.data.get('amount', 0)
+        raw_amount = request.data.get('amount', 0)
+        try:
+            amount = Decimal(str(raw_amount or 0))
+        except (InvalidOperation, TypeError):
+            amount = Decimal('0')
         FinanceRecord.objects.create(
             student_name=app.applicant_name,
             amount=amount or 0,
@@ -72,7 +85,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             remarks=f"Auto-created for application {app.id}",
             application=app,
         )
-        return Response(self.get_serializer(app).data)
+        return self._maybe_redirect(request, app)
 
     @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
     def disburse(self, request, pk=None):
@@ -85,7 +98,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         app.save()
         # Update finance records
         app.finance_records.update(status='disbursed')
-        return Response(self.get_serializer(app).data)
+        return self._maybe_redirect(request, app)
 
     @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
     def reject(self, request, pk=None):
@@ -97,7 +110,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         app.mark_rejected()
         app.save()
         app.finance_records.update(status='rejected')
-        return Response(self.get_serializer(app).data)
+        return self._maybe_redirect(request, app)
 
 
 router = DefaultRouter()

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <!-- Sidebar for login/registration -->
+  <div class="col-md-3">
+    <div class="card mb-3">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0">🔐 Login</h6>
+      </div>
+      <div class="card-body">
+        <h6>Applicant Login Here</h6>
+        <form>
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Application ID / Mobile">
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Enter Captcha">
+          </div>
+          <button type="submit" class="btn btn-success w-100 mb-2">Login Here</button>
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-outline-secondary">Forgot Password</button>
+            <button class="btn btn-sm btn-outline-danger">Forgot Username</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-body text-center">
+        <a href="{% url 'scholarships:applicant_dashboard' %}" class="btn btn-warning w-100 mb-2">
+          📝 New Applicant Registration
+        </a>
+        <a href="{% url 'scholarships:applicant_dashboard' %}" class="btn btn-outline-primary w-100 mb-2">
+          🔍 Find Eligible Schemes
+        </a>
+        <a href="/admin/" class="btn btn-outline-secondary w-100">
+          🏛️ Institute / Dept / DDO Login
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-warning">
+        <h6 class="mb-0">📢 Notice</h6>
+      </div>
+      <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+        <p class="text-danger mb-2"><strong>Attention!!!</strong></p>
+        <ul class="small">
+          <li class="mb-2">Application acceptance for the new academic year A.Y. 2025–26 has commenced from 30th June 2025.</li>
+          <li class="mb-2">Application acceptance (Fresh/Renewal) for A.Y. 2024–25 will continue until 30th November 2025.</li>
+          <li class="mb-2">The Re-apply provision for A.Y. 2023–24 has been enabled till 30th November 2024.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-9">
+    <div class="alert alert-danger text-center mb-4">
+      <strong>Application acceptance for the new academic year A.Y. 2025–26 has commenced from 30th June 2025. Application acceptance...</strong>
+    </div>
+
+    <div class="p-4 mb-4 bg-white rounded shadow-sm">
+      <h1 class="h3 mb-2">Welcome to the Scholarship Portal</h1>
+      <p class="text-muted mb-0">Apply for schemes, track verification, and receive disbursements like MahaDBT.</p>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">📚 Apply for Scheme</h5>
+            <p class="card-text">Browse active schemes and start your application online.</p>
+            <a href="{% url 'scholarships:scheme_list' %}" class="btn btn-primary">View Schemes</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">📊 Track Application</h5>
+            <p class="card-text">Track your application across submission, verification, approval, and payment.</p>
+            <a href="{% url 'scholarships:applicant_dashboard' %}" class="btn btn-primary">My Dashboard</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">🏦 Aadhaar Bank Link</h5>
+            <p class="card-text">Verify Aadhaar seeding with bank account for scholarship disbursement.</p>
+            <a href="{% url 'scholarships:aadhaar_bank_link' %}" class="btn btn-outline-primary">Check Status</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Links -->
+    <div class="row g-3 mt-3">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h6 class="mb-0">📄 User Manuals & Help</h6>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2">📘 <a href="#">Help file for Online Application Process</a></li>
+              <li class="mb-2">🚫 <a href="#">Pop Up Blocker Guidance</a></li>
+              <li class="mb-2">🔑 <a href="#">Forgot Password</a></li>
+              <li class="mb-2">👤 <a href="#">Forgot Username</a></li>
+              <li class="mb-2">🏦 <a href="{% url 'scholarships:aadhaar_bank_link' %}">Aadhaar seeding with NPCI mapping form</a> <span class="badge bg-danger">New</span></li>
+              <li class="mb-2">✅ <a href="#">Check for Bank Aadhaar Mapping Process</a> <span class="badge bg-danger">New</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

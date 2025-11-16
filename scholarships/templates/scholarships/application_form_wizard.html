@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0">Application Form</h6>
+      </div>
+      <div class="list-group list-group-flush">
+        <a href="?step=personal" class="list-group-item {% if current_step == 'personal' %}active{% endif %}">
+          {% if current_step != 'personal' %}✓{% endif %} Personal Details
+        </a>
+        <a href="?step=academic" class="list-group-item {% if current_step == 'academic' %}active{% endif %}">
+          Academic & Work Experience
+        </a>
+        <a href="?step=other" class="list-group-item {% if current_step == 'other' %}active{% endif %}">
+          Other Details
+        </a>
+        <a href="?step=preview" class="list-group-item {% if current_step == 'preview' %}active{% endif %}">
+          Form Preview and Declaration
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-header">
+        <h5>
+          {% if current_step == 'personal' %}Personal Details
+          {% elif current_step == 'academic' %}Academic & Work Experience
+          {% elif current_step == 'other' %}Other Details - Upload Photo/CV
+          {% else %}Form Preview and Declaration
+          {% endif %}
+        </h5>
+      </div>
+      <div class="card-body">
+        {% if current_step == 'other' %}
+        <div class="alert alert-warning">
+          <h6>SECTION 3/3</h6>
+          <h5>Upload Photo/CV</h5>
+          <p class="text-danger mb-0">
+            If you have uploaded your photo before 16-Sep-2025 and want to edit the application form please reupload the photo conforming to below specifications.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h6>Smart Card Details</h6>
+          <p>Smart Card is your TCS identity card which will be handed over to you once you join the company.</p>
+          <div class="alert alert-light">
+            <strong>Note:</strong> Please provide the following details carefully, as they will be printed on your <strong>TCS Identity Card</strong> if you are selected to join TCS.
+          </div>
+          <p class="mb-2"><strong>Name (as to be printed on smart Card)</strong></p>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Student</label>
+              {{ form.student }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              {{ form.applicant_name }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              {{ form.applicant_email }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Scheme</label>
+              {{ form.scheme }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Institute</label>
+              {{ form.institute }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Photo/Document Upload</label>
+              <input type="file" class="form-control" name="photo" accept="image/*,.pdf">
+              <small class="text-muted">Maximum file size: 100KB. Formats: JPG, PNG, PDF</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Remarks</label>
+              {{ form.remarks }}
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+              <a href="?step=academic" class="btn btn-outline-secondary">← Back</a>
+              <div>
+                <button type="submit" name="save" class="btn btn-outline-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Save and Continue</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        {% else %}
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="d-flex justify-content-between mt-4">
+            {% if current_step == 'academic' %}
+            <a href="?step=personal" class="btn btn-outline-secondary">← Back</a>
+            {% elif current_step == 'preview' %}
+            <a href="?step=other" class="btn btn-outline-secondary">← Back</a>
+            {% else %}
+            <span></span>
+            {% endif %}
+            
+            {% if current_step == 'personal' %}
+            <a href="?step=academic" class="btn btn-primary">Save and Continue →</a>
+            {% elif current_step == 'academic' %}
+            <a href="?step=other" class="btn btn-primary">Save and Continue →</a>
+            {% elif current_step == 'preview' %}
+            <button type="submit" class="btn btn-success">Submit Application</button>
+            {% endif %}
+          </div>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

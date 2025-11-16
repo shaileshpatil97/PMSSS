@@ -1,6 +1,6 @@
 # PMSSS Scholarship Portal (Django)
 
-An original, clean, MahaDBT-inspired scholarship portal with modules for Students, Institutes, SAG, Finance, and Scholarships. Includes Django admin, modern Bootstrap UI, and REST-ready APIs.
+An original, clean, PMSSS-inspired scholarship portal with modules for Students, Institutes, SAG, Finance, and Scholarships. Includes Django admin, modern Bootstrap UI, and REST-ready APIs.
 
 ## Features
 - Modern Bootstrap 5 UI and shared layout
@@ -24,7 +24,7 @@ python manage.py runserver
 
 Then open http://127.0.0.1:8000/ and http://127.0.0.1:8000/admin/.
 
-## Roadmap (MahaDBT-like)
+## Roadmap (PMSSS-like)
 - Student/citizen login and profile
 - Role dashboards: Institute, Department, Finance
 - OTP login and notifications (email/SMS)

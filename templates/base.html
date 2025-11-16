@@ -13,26 +13,69 @@
     .stepper .step { flex: 1; text-align: center; padding: .5rem; }
     .stepper .step.active { color: #0d6efd; font-weight: 600; }
     footer { padding: 2rem 0; color: #666; font-size: .9rem; }
+    .top-bar { background: #ff6b35; color: white; padding: 0.5rem 0; font-size: 0.9rem; }
+    .scheme-nav { background: #003d82; padding: 0.5rem 0; }
+    .scheme-nav .nav-link { color: white !important; padding: 0.5rem 1rem; }
+    .scheme-nav .nav-link:hover { background: rgba(255,255,255,0.1); }
   </style>
   {% block head %}{% endblock %}
   
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0a4275;">
+  <!-- Top bar with "How to Apply Online?" -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <strong>How to Apply Online?</strong>
+        <a href="#" class="text-white ms-3">Benefit Schemes</a>
+      </div>
+      <div>
+        <a href="#" class="text-white">Skip To Main Content</a>
+        <span class="mx-2">|</span>
+        <a href="#" class="text-white">Skip To Navigation</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main navbar with logo -->
+  <nav class="navbar navbar-light bg-white border-bottom">
     <div class="container">
-      <a class="navbar-brand" href="/">MahaDBT Portal</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample" aria-controls="navbarsExample" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarsExample">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="{% url 'scholarships:scheme_list' %}">Schemes</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'scholarships:application_list' %}">Applications</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'students:list' %}">Students</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'institutes:list' %}">Institutes</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'finance:list' %}">Finance</a></li>
-          <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
-        </ul>
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="https://via.placeholder.com/50" alt="Logo" class="me-2">
+        <div>
+          <div class="text-primary fs-4 fw-bold">महाDBT</div>
+          <div class="text-muted small">आपले सरकार</div>
+        </div>
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="/" class="btn btn-sm btn-outline-primary">🏠 Post Matric Home</a>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            Welcome, User
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'scholarships:applicant_dashboard' %}">Dashboard</a></li>
+            <li><a class="dropdown-item" href="/admin/">Admin Panel</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+          </ul>
+        </div>
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-outline-dark">A-</button>
+          <button class="btn btn-outline-dark">A</button>
+          <button class="btn btn-outline-dark">A+</button>
+        </div>
+        <button class="btn btn-sm btn-outline-secondary">मराठी</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Scheme categories navigation -->
+  <nav class="scheme-nav">
+    <div class="container">
+      <div class="d-flex align-items-center">
+        <a href="{% url 'scholarships:scheme_list' %}" class="nav-link">📚 Post Matric Scholarship</a>
+        <a href="#" class="nav-link">👨‍🎓 Pre Matric Scholarship</a>
       </div>
     </div>
   </nav>
@@ -44,7 +87,13 @@
   <footer class="border-top mt-5">
     <div class="container d-flex justify-content-between">
       <div>&copy; {% now "Y" %} MahaDBT-like Portal (Demo)</div>
-      <div><small>For demonstration purposes only</small></div>
+      <div>
+        <a href="#" class="text-decoration-none me-3">About</a>
+        <a href="#" class="text-decoration-none me-3">Privacy Notices</a>
+        <a href="#" class="text-decoration-none me-3">Cookie Policy</a>
+        <a href="#" class="text-decoration-none me-3">Disclaimer</a>
+        <a href="#" class="text-decoration-none">Browser Compatibility</a>
+      </div>
     </div>
   </footer>
 

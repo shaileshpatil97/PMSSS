@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3">
+    <div class="list-group">
+      <a href="{% url 'scholarships:aadhaar_bank_link' %}" class="list-group-item list-group-item-action">Aadhaar Bank Link</a>
+      <a href="{% url 'scholarships:applicant_dashboard' %}" class="list-group-item list-group-item-action active">Home</a>
+      <a href="{% url 'scholarships:profile' %}" class="list-group-item list-group-item-action">Profile</a>
+      <a href="{% url 'scholarships:all_schemes' %}" class="list-group-item list-group-item-action">All Schemes</a>
+      <a href="{% url 'scholarships:my_applied_scheme' %}" class="list-group-item list-group-item-action">My Applied Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">My Cancelled Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">Right To Give Up</a>
+      <a href="{% url 'scholarships:grievance_suggestion' %}" class="list-group-item list-group-item-action">Grievance/Suggestion Dashboard</a>
+      <a href="#" class="list-group-item list-group-item-action">Declaration Forms</a>
+      <a href="#" class="list-group-item list-group-item-action">Notification</a>
+      <a href="{% url 'scholarships:my_applied_scheme_history' %}" class="list-group-item list-group-item-action">My Applied Scheme History</a>
+    </div>
+    
+    <div class="alert alert-warning mt-3" role="alert">
+      <strong><i class="bi bi-info-circle"></i> Click here for Help</strong>
+    </div>
+    
+    <div class="mt-3">
+      <button class="btn btn-outline-primary w-100">
+        <i class="bi bi-chat-dots"></i> Grievance / Suggestions
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-9">
+    <!-- Profile Status -->
+    <div class="card mb-3">
+      <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">Profile Status (AY 2025-2026)</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <span>Profile Completeness</span>
+          <strong class="text-success">{{ profile_completeness }}%</strong>
+        </div>
+        <div class="progress mt-2" style="height: 25px;">
+          <div class="progress-bar bg-success" role="progressbar" style="width: {{ profile_completeness }}%;" 
+               aria-valuenow="{{ profile_completeness }}" aria-valuemin="0" aria-valuemax="100">
+            {{ profile_completeness }}%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Eligible Schemes -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Suggested Eligible Schemes (On the basis of Caste, Religion and Income)</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Scheme Name</th>
+                <th>Department Name</th>
+                <th>Scheme Type</th>
+                <th>Take Action</th>
+                <th>Download GRs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scheme in suggested_schemes %}
+              <tr>
+                <td>{{ scheme.name }}</td>
+                <td>{{ scheme.department }}</td>
+                <td><span class="badge bg-info">Scholarship</span></td>
+                <td>
+                  <a href="{% url 'scholarships:application_create' %}?scheme={{ scheme.id }}" class="text-primary">Apply</a>
+                </td>
+                <td>
+                  <a href="#" class="text-primary">PDF</a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-muted">No eligible schemes found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Applications (if any) -->
+    {% if my_applications %}
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="mb-0">My Recent Applications</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Scheme</th>
+                <th>Status</th>
+                <th>Applied On</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in my_applications %}
+              <tr>
+                <td>{{ app.id }}</td>
+                <td>{{ app.scheme.name }}</td>
+                <td><span class="badge text-bg-info">{{ app.get_status_display }}</span></td>
+                <td>{{ app.created_at|date:'d-M-Y' }}</td>
+                <td><a href="{% url 'scholarships:application_detail' app.pk %}">View</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

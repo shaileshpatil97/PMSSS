@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3">
+    <div class="list-group">
+      <a href="{% url 'scholarships:aadhaar_bank_link' %}" class="list-group-item list-group-item-action active">Aadhaar Bank Link</a>
+      <a href="{% url 'scholarships:applicant_dashboard' %}" class="list-group-item list-group-item-action">Home</a>
+      <a href="{% url 'scholarships:profile' %}" class="list-group-item list-group-item-action">Profile</a>
+      <a href="{% url 'scholarships:all_schemes' %}" class="list-group-item list-group-item-action">All Schemes</a>
+      <a href="{% url 'scholarships:my_applied_scheme' %}" class="list-group-item list-group-item-action">My Applied Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">My Cancelled Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">Right To Give Up</a>
+      <a href="{% url 'scholarships:grievance_suggestion' %}" class="list-group-item list-group-item-action">Grievance/Suggestion Dashboard</a>
+      <a href="#" class="list-group-item list-group-item-action">Declaration Forms</a>
+      <a href="#" class="list-group-item list-group-item-action">Notification</a>
+      <a href="{% url 'scholarships:my_applied_scheme_history' %}" class="list-group-item list-group-item-action">My Applied Scheme History</a>
+    </div>
+    
+    <div class="alert alert-warning mt-3" role="alert">
+      <strong>📘 Click here for Help</strong>
+    </div>
+    
+    <div class="mt-3">
+      <button class="btn btn-outline-primary w-100">
+        💬 Grievance / Suggestions
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Aadhaar Bank Link Status</h5>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-warning">
+          <p class="mb-2">
+            महाडीबीटी पोर्टलवरील शिष्यवृती योजनांचा लाभ विद्याथ्यांच्या आधार संलग्न बँक खात्यात जमा होतो. त्यामुळे सर्व विद्याथ्यांनी आपले आधार क्रमांक बँक खात्याशी संलग्न केलेस
+            आहेत की नाही, हे तपासणे आवश्यक आहे. यासंबंधी विद्याथ्यांनी या लिंकवर क्लिक करावे – 
+            <a href="https://www.npci.org.in/" class="alert-link" target="_blank">https://www.npci.org.in/</a> 
+            आणि प्रक्रिया अनुसरण करावे –
+          </p>
+        </div>
+
+        <div class="mb-4">
+          <p class="fw-bold">🔗 लिंक: <a href="https://www.npci.org.in/" target="_blank">https://www.npci.org.in/</a> → Consumer → Bharat Aadhaar Seeding Enabler (BASE)</p>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="border rounded p-3 text-center">
+              <img src="https://via.placeholder.com/500x250/0066cc/ffffff?text=NPCI+Screenshot+Step+1" alt="Step 1" class="img-fluid mb-2">
+              <p class="text-muted small">Click on "Consumer" tab and find "Bharat Aadhaar Seeding Enabler (BASE)"</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="border rounded p-3 text-center">
+              <img src="https://via.placeholder.com/500x250/0066cc/ffffff?text=BASE+Portal+Step+2" alt="Step 2" class="img-fluid mb-2">
+              <p class="text-muted small">Enter your bank details and check Aadhaar mapping status</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h6 class="mb-0">Bharat Aadhaar Seeding Enabler (BASE) मार्गीत सुविधा:</h6>
+          </div>
+          <div class="card-body">
+            <ol class="mb-0">
+              <li class="mb-2">
+                <strong>📝 आधार सीडिंग/डिसीडिंग (Aadhaar Seeding/Deseeding):</strong> 
+                आधार कार्ड बँक खात्याशी जोडण्यासाठी/काढण्यासाठी.
+              </li>
+              <li class="mb-2">
+                <strong>✅ आधार मॅप्ड स्टेटस (Aadhaar Mapped Status):</strong> 
+                आधार कार्ड बँक खात्याशी संलग्न आहे की नाही, ते तपासण्यासाठी.
+              </li>
+              <li class="mb-2">
+                <strong>📜 आधार मॅपिंग हिस्ट्री (Aadhaar Mapping History):</strong> 
+                आधार-बँक संलग्नता इतिहास पाहण्यासाठी.
+              </li>
+              <li class="mb-2">
+                <strong>📋 रिक्वेस्ट स्टेटस चेक (Request Status Check):</strong> 
+                सादर केलेल्या अर्जांची स्थिती तपासण्यासाठी.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="alert alert-info mt-4">
+          <strong>💡 Note:</strong> Ensure your Aadhaar is linked to your bank account to receive scholarship disbursements directly.
+          Visit your bank branch or use online banking to complete Aadhaar-bank seeding if not already done.
+        </div>
+
+        <div class="mt-4 text-center">
+          <a href="https://www.npci.org.in/" target="_blank" class="btn btn-primary btn-lg">
+            Go to NPCI BASE Portal
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

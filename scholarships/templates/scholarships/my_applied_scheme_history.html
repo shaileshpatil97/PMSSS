@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3">
+    <div class="list-group">
+      <a href="{% url 'scholarships:aadhaar_bank_link' %}" class="list-group-item list-group-item-action">Aadhaar Bank Link</a>
+      <a href="{% url 'scholarships:applicant_dashboard' %}" class="list-group-item list-group-item-action">Home</a>
+      <a href="{% url 'scholarships:profile' %}" class="list-group-item list-group-item-action">Profile</a>
+      <a href="{% url 'scholarships:all_schemes' %}" class="list-group-item list-group-item-action">All Schemes</a>
+      <a href="{% url 'scholarships:my_applied_scheme' %}" class="list-group-item list-group-item-action">My Applied Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">My Cancelled Scheme</a>
+      <a href="#" class="list-group-item list-group-item-action">Right To Give Up</a>
+      <a href="{% url 'scholarships:grievance_suggestion' %}" class="list-group-item list-group-item-action">Grievance/Suggestion Dashboard</a>
+      <a href="#" class="list-group-item list-group-item-action">Declaration Forms</a>
+      <a href="#" class="list-group-item list-group-item-action">Notification</a>
+      <a href="{% url 'scholarships:my_applied_scheme_history' %}" class="list-group-item list-group-item-action active">My Applied Scheme History</a>
+    </div>
+    
+    <div class="alert alert-warning mt-3">
+      <strong>📘 Click here for Help</strong>
+    </div>
+    
+    <div class="mt-3">
+      <button class="btn btn-outline-primary w-100">💬 Grievance / Suggestions</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-9">
+    <h4 class="mb-4">Applied Scheme History</h4>
+    
+    <div class="card">
+      <div class="card-body">
+        <!-- Filter Form -->
+        <form method="GET" class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Select Academic Year <span class="text-danger">*</span></label>
+            <select name="academic_year" class="form-select">
+              <option value="">--Select--</option>
+              {% for year in academic_years %}
+              <option value="{{ year }}" {% if request.GET.academic_year == year %}selected{% endif %}>{{ year }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+        </form>
+
+        <!-- Results -->
+        {% if request.GET.academic_year %}
+        <div class="alert alert-info">
+          <strong>Showing results for Academic Year: {{ request.GET.academic_year }}</strong>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Application ID</th>
+                <th>Department Name</th>
+                <th>Scheme Name</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="text-center text-muted">No applications found for this academic year</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+          <strong>Please select an academic year to view history</strong>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
