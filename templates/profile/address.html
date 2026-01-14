@@ -1,0 +1,13 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<h2>Address Information</h2>
+
+<form method="post">
+{% csrf_token %}
+Address: <textarea name="address">{{profile.address}}</textarea><br>
+District: <input name="district" value="{{profile.district}}"><br>
+State: <input name="state" value="{{profile.state}}"><br>
+Pincode: <input name="pincode" value="{{profile.pincode}}"><br>
+<button type="submit">Next</button>
+</form>
+{% endblock %}

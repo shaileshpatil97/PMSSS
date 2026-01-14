@@ -1,0 +1,21 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<h2>Personal Information</h2>
+
+<form method="post" action="{% url 'profile_personal' %}">
+{% csrf_token %}
+Full Name: <input name="full_name" value="{{profile.full_name}}"><br>
+DOB: <input type="date" name="dob" value="{{profile.dob}}"><br>
+Gender:
+<select name="gender">
+<option {% if profile.gender == "Male" %}selected{% endif %}>Male</option>
+<option {% if profile.gender == "Female" %}selected{% endif %}>Female</option>
+</select><br>
+Mobile: <input name="mobile" value="{{profile.mobile}}"><br>
+Email: <input name="email" value="{{profile.email}}"><br>
+
+<button type="submit">Next</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<h2>Other Information</h2>
+
+<form method="post">
+{% csrf_token %}
+<label>Caste</label>
+<input name="caste" value="{{profile.caste}}" required>
+
+<label>Annual Income</label>
+<input name="income" value="{{profile.income}}" required>
+
+<button>Next</button>
+</form>
+{% endblock %}

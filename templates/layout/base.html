@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PMSSS Scholarship Portal</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+.sidebar a{
+    display:block;
+    padding:10px;
+    border-bottom:1px solid #ddd;
+    text-decoration:none;
+    color:#000;
+}
+.sidebar a:hover{
+    background:#f0f0f0;
+}
+</style>
+</head>
+<body class="bg-light">
+
+<div class="bg-primary text-white p-3 d-flex justify-content-between align-items-center">
+    <span class="fs-5">PMSSS Scholarship Portal</span>
+    <span class="bg-light text-dark px-3 py-1 rounded">
+        {{ request.user.aadhaar }}
+    </span>
+</div>
+
+
+<div class="container-fluid">
+<div class="row">
+
+<!-- Sidebar -->
+<div class="col-md-3 bg-white sidebar p-0">
+<a href="{% url 'student_home' %}">Home</a>
+<a href="{% url 'profile_personal' %}">Profile</a>
+<a href="{% url 'all_schemes' %}">All Schemes</a>
+<a href="{% url 'my_applied' %}">My Applied Scheme</a>
+<a href="{% url 'my_cancelled' %}">My Cancelled Scheme</a>
+<a href="{% url 'notifications' %}">Notification</a>
+<a href="{% url 'scheme_history' %}">My Applied Scheme History</a>
+
+</div>
+
+<!-- Main content -->
+<div class="col-md-9 p-4">
+{% block content %}{% endblock %}
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

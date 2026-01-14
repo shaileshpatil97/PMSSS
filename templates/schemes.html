@@ -1,0 +1,13 @@
+<h2>Eligible Schemes</h2>
+<table>
+<tr><th>Scheme</th><th>Dept</th><th>Action</th></tr>
+{% for s in schemes %}
+<tr>
+<td>{{ s.name }}</td>
+<td>{{ s.department }}</td>
+<td><a href="/apply/">Apply</a></td>
+</tr>
+{% empty %}
+<tr><td colspan="3">No eligible schemes</td></tr>
+{% endfor %}
+</table>

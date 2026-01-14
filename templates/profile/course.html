@@ -1,0 +1,18 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<h2>Current Course</h2>
+
+<form method="post">
+{% csrf_token %}
+<label>Course Name</label>
+<input name="course" value="{{profile.course}}" required>
+
+<label>Institute</label>
+<input name="institute" value="{{profile.institute}}" required>
+
+<label>Current Year</label>
+<input name="year" value="{{profile.year}}" required>
+
+<button>Next</button>
+</form>
+{% endblock %}

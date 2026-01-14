@@ -1,0 +1,28 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<div class="bg-success text-white p-2 mb-3">
+Profile Completeness : 100%
+</div>
+
+<h5>Suggested Eligible Schemes</h5>
+
+<table class="table table-bordered bg-white">
+<tr><th>Scheme</th><th>Department</th><th>Action</th></tr>
+<tr><td>Post Matric Scholarship</td><td>Social Welfare</td><td><a href="/apply/" class="btn btn-sm btn-primary">Apply</a></td></tr>
+<tr><td>Tuition Fee Reimbursement</td><td>Minority Welfare</td><td><a href="/apply/" class="btn btn-sm btn-primary">Apply</a></td></tr>
+</table>
+
+<hr>
+
+<h5>My Applications</h5>
+<table class="table table-bordered bg-white">
+<tr><th>Course</th><th>Institute</th><th>Year</th><th>Status</th></tr>
+{% for a in request.user.scholarshipapplication_set.all %}
+<tr>
+<td>{{a.course}}</td><td>{{a.institute_name}}</td><td>{{a.year}}</td><td>{{a.status}}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
