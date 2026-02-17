@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'applications',
     'digilocker_mock',
     'applisarkar_mock',
+    'institutes',
 
 
 

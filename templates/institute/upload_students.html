@@ -1,0 +1,16 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<h4>Upload Student List (CSV)</h4>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file" required class="form-control mb-2">
+    <button class="btn btn-primary">Upload CSV</button>
+</form>
+
+<p class="mt-3 text-muted">
+CSV Format: aadhaar, student_name, course, year
+</p>
+
+{% endblock %}

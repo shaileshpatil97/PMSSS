@@ -34,20 +34,45 @@ def register(request):
 
 
 def login_view(request):
+    error = None
+
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = authenticate(
-                request,
-                aadhaar=form.cleaned_data['aadhaar'],
-                password=form.cleaned_data['password']
-            )
-            if user and user.role == "STUDENT":
+            aadhaar = form.cleaned_data["aadhaar"]
+            password = form.cleaned_data["password"]
+
+            user = authenticate(request, aadhaar=aadhaar, password=password)
+
+            if user is not None:
                 login(request, user)
-                return redirect("dashboard")
+
+                # STUDENT
+                if user.role == "STUDENT":
+                    return redirect("student_home")
+
+                # INSTITUTE
+                elif user.role == "INSTITUTE":
+                    return redirect("institute_dashboard")
+
+                # ADMIN
+                elif user.role == "ADMIN":
+                    return redirect("/admin/")
+
+                # OFFICER (future)
+                elif user.role == "OFFICER":
+                    return redirect("officer_dashboard")
+
+            else:
+                error = "Invalid Aadhaar or Password"
+
     else:
         form = LoginForm()
-    return render(request, "login.html", {"form": form})
+
+    return render(request, "login.html", {
+        "form": form,
+        "error": error
+    })
 
 
 @login_required
