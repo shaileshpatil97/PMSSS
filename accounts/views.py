@@ -32,40 +32,32 @@ def register(request):
     return render(request, "register.html", {"form": form})
 
 
-
 def login_view(request):
     error = None
 
     if request.method == "POST":
         form = LoginForm(request.POST)
+
         if form.is_valid():
-            aadhaar = form.cleaned_data["aadhaar"]
-            password = form.cleaned_data["password"]
+            aadhaar = form.cleaned_data.get("aadhaar")
+            password = form.cleaned_data.get("password")
 
             user = authenticate(request, aadhaar=aadhaar, password=password)
 
             if user is not None:
                 login(request, user)
 
-                # STUDENT
                 if user.role == "STUDENT":
                     return redirect("student_home")
 
-                # INSTITUTE
-                elif user.role == "INSTITUTE":
-                    return redirect("institute_dashboard")
+                elif user.role == "Institute":
+                    return redirect("/institute/dashboard/")
 
-                # ADMIN
                 elif user.role == "ADMIN":
                     return redirect("/admin/")
 
-                # OFFICER (future)
-                elif user.role == "OFFICER":
-                    return redirect("officer_dashboard")
-
             else:
                 error = "Invalid Aadhaar or Password"
-
     else:
         form = LoginForm()
 

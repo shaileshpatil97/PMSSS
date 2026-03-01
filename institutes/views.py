@@ -1,10 +1,16 @@
-from .models import Institute, InstituteVerification
-from applications.models import ScholarshipApplication
-import csv
-from .models import InstituteStudent
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.shortcuts import redirect, render
+import csv
 
+from .models import Institute, InstituteVerification, InstituteStudent
+from applications.models import ScholarshipApplication
+
+
+
+
+# ===============================
+# INSTITUTE DASHBOARD
+# ===============================
 def institute_dashboard(request):
     institute = Institute.objects.get(user=request.user)
 
@@ -41,6 +47,10 @@ def institute_dashboard(request):
     })
 
 
+
+# ===============================
+# CSV UPLOAD
+# ===============================
 def upload_students_csv(request):
     try:
         institute = Institute.objects.get(user=request.user)
@@ -49,7 +59,7 @@ def upload_students_csv(request):
             request,
             "Institute profile not found. Please complete institute registration first."
         )
-        return redirect("institute_dashboard")  # or login / home
+        return redirect("institute_dashboard")
 
     if request.method == "POST" and request.FILES.get("file"):
         csv_file = request.FILES["file"]
@@ -73,21 +83,21 @@ def upload_students_csv(request):
     return render(request, "institute/upload_students.html")
 
 
+# ===============================
+# FILLED vs NOT FILLED
+# ===============================
 def institute_student_tracking(request):
     institute = Institute.objects.get(user=request.user)
 
-    # Aadhaar list of students who submitted applications
     applied_aadhaars = ScholarshipApplication.objects.filter(
         institute_name=institute.institute_name
     ).values_list("student__aadhaar", flat=True)
 
-    # Students who FILLED the form
     filled_students = InstituteStudent.objects.filter(
         institute=institute,
         aadhaar__in=applied_aadhaars
     )
 
-    # Students who DID NOT fill the form
     not_filled_students = InstituteStudent.objects.filter(
         institute=institute
     ).exclude(
@@ -100,7 +110,9 @@ def institute_student_tracking(request):
     })
 
 
-
+# ===============================
+# REJECTED APPLICATIONS
+# ===============================
 def rejected_applications(request):
     institute = Institute.objects.get(user=request.user)
 
