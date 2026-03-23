@@ -1,21 +1,95 @@
 {% extends "layout/base.html" %}
 {% block content %}
 
-<h2>Personal Information</h2>
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <!-- Progress Steps -->
+        <div class="d-flex justify-content-between mb-5 px-3 position-relative d-none d-md-flex">
+            <div class="position-absolute top-50 start-0 end-0 translate-middle-y"
+                style="height: 2px; background: rgba(255,255,255,0.05); z-index: 0; left: 10% !important; right: 10% !important;">
+            </div>
+            <div class="text-center position-relative" style="z-index: 1;">
+                <div class="text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+                    style="width: 44px; height: 44px; background: var(--color-accent); font-weight: bold; border: 4px solid #0f172a;">
+                    1</div>
+                <small class="text-white fw-medium tracking-wide text-uppercase"
+                    style="font-size: 0.75rem;">Personal</small>
+            </div>
+            <div class="text-center position-relative" style="z-index: 1;">
+                <div class="text-muted rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+                    style="width: 44px; height: 44px; background: #1e293b; border: 4px solid #0f172a;">2</div>
+                <small class="text-muted-modern tracking-wide text-uppercase"
+                    style="font-size: 0.75rem;">Address</small>
+            </div>
+            <div class="text-center position-relative" style="z-index: 1;">
+                <div class="text-muted rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+                    style="width: 44px; height: 44px; background: #1e293b; border: 4px solid #0f172a;">3</div>
+                <small class="text-muted-modern tracking-wide text-uppercase" style="font-size: 0.75rem;">Other</small>
+            </div>
+            <div class="text-center position-relative" style="z-index: 1;">
+                <div class="text-muted rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+                    style="width: 44px; height: 44px; background: #1e293b; border: 4px solid #0f172a;">4</div>
+                <small class="text-muted-modern tracking-wide text-uppercase" style="font-size: 0.75rem;">Course</small>
+            </div>
+        </div>
 
-<form method="post" action="{% url 'profile_personal' %}">
-{% csrf_token %}
-Full Name: <input name="full_name" value="{{profile.full_name}}"><br>
-DOB: <input type="date" name="dob" value="{{profile.dob}}"><br>
-Gender:
-<select name="gender">
-<option {% if profile.gender == "Male" %}selected{% endif %}>Male</option>
-<option {% if profile.gender == "Female" %}selected{% endif %}>Female</option>
-</select><br>
-Mobile: <input name="mobile" value="{{profile.mobile}}"><br>
-Email: <input name="email" value="{{profile.email}}"><br>
+        <div class="glass-card p-4 p-md-5 shadow-lg border-0" style="background: rgba(255,255,255,0.02);">
+            <h4 class="fw-bold mb-4 text-white pb-3" style="border-bottom: 2px solid rgba(255,255,255,0.05);">Personal
+                Information</h4>
 
-<button type="submit">Next</button>
-</form>
+            <form method="post" action="{% url 'profile_personal' %}" class="mt-4">
+                {% csrf_token %}
+
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Full
+                            Name</label>
+                        <input type="text" name="full_name" value="{{profile.full_name|default:''}}"
+                            class="form-control" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Date
+                            of Birth</label>
+                        <input type="date" name="dob" value="{{profile.dob|date:'Y-m-d'|default:''}}"
+                            class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label
+                            class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Gender</label>
+                        <select name="gender" class="form-select">
+                            <option value="">Select Gender</option>
+                            <option value="Male" {% if profile.gender=="Male" %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if profile.gender=="Female" %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if profile.gender=="Other" %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label
+                            class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Mobile
+                            Number</label>
+                        <input type="tel" name="mobile" value="{{profile.mobile|default:''}}" class="form-control"
+                            required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label
+                            class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Email
+                            Address</label>
+                        <input type="email" name="email" value="{{profile.email|default:''}}" class="form-control"
+                            required placeholder="your.email@example.com">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-5 pt-4" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                    <button type="submit" class="btn btn-modern px-5 py-2 rounded-pill fw-bold">Save & Next <span
+                            class="ms-2">→</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -1,11 +1,32 @@
 {% extends "layout/public_base.html" %}
 {% block content %}
-<div class="card p-4 col-md-5">
-<h4>Student Login</h4>
-<form method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<button class="btn btn-success">Login</button>
-</form>
+<div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card p-5 text-center shadow-lg">
+            <h3 class="fw-bold mb-3">Welcome Back</h3>
+            <p class="text-muted-modern mb-4">Please sign in to your student account</p>
+
+            <form method="post" class="text-start">
+                {% csrf_token %}
+                
+                {% if error %}
+                    <div class="alert alert-danger p-2 small mb-3 text-center rounded">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                
+                {{ form.as_p }}
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-modern py-2">Sign In</button>
+                </div>
+            </form>
+
+            <div class="mt-4">
+                <p class="text-muted-modern small mb-0">Don't have an account? <a href="/register/"
+                        class="text-accent fw-bold text-decoration-none">Register here</a></p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
