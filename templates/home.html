@@ -1,36 +1,24 @@
 {% extends "layout/public_base.html" %}
 
 {% block content %}
-<div class="row justify-content-center align-items-center" style="min-height: 75vh;">
-    <div class="col-md-10 col-lg-8 text-center">
-        <div class="glass-card p-5 shadow-lg fade-in">
-            <h1 class="display-4 fw-bold mb-4 text-white">Welcome to the <span class="text-accent">PMSSS Portal</span></h1>
-            <p class="lead text-muted-modern mb-5 px-3">
-                The Prime Minister's Special Scholarship Scheme provides seamless online scholarship applications, status tracking, and direct benefit transfers for students.
-            </p>
-            
-            <div class="d-flex justify-content-center gap-4 flex-wrap">
-                <a href="{% url 'login' %}" class="btn btn-modern btn-lg px-5">Sign In</a>
-                <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg px-5" style="border-radius: 8px; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s; background: rgba(255,255,255,0.05);">Register Now</a>
-            </div>
-            
-            <div class="mt-5 pt-4" style="border-top: 1px solid rgba(255,255,255,0.1);">
-                <div class="row text-center text-muted-modern">
-                    <div class="col-md-4 mb-3">
-                        <h3 class="fw-bold text-white mb-1">100%</h3>
-                        <small class="text-uppercase tracking-wide">Online Process</small>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h3 class="fw-bold text-white mb-1">DBT</h3>
-                        <small class="text-uppercase tracking-wide">Direct Transfer</small>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h3 class="fw-bold text-white mb-1">24/7</h3>
-                        <small class="text-uppercase tracking-wide">Status Tracking</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="card p-4">
+  <h4>Welcome to PMSSS Scholarship Portal</h4>
+  <p>This portal provides online scholarship services for students.</p>
+</div>
+<div class="card p-4 col-md-5">
+<h4>Student Login</h4>
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<a href="{% url 'login' %}" class="btn btn-success">Login</a>
+</form>
+</div>
+<div class="card p-4 col-md-6">
+<h4>Student Registration</h4>
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+</form>
 </div>
 {% endblock %}

@@ -18,14 +18,13 @@ def register(request):
                 password=form.cleaned_data['password'],
                 role="STUDENT"
             )
-            StudentProfile.objects.create(
-                student=user,
-                full_name=form.cleaned_data['full_name'],
-                dob=form.cleaned_data['dob'],
-                mobile=form.cleaned_data['mobile'],
-                email=form.cleaned_data['email'],
-                address=form.cleaned_data['address']
-            )
+            profile, _ = StudentProfile.objects.get_or_create(student=user)
+            profile.full_name = form.cleaned_data['full_name']
+            profile.dob = form.cleaned_data['dob']
+            profile.mobile = form.cleaned_data['mobile']
+            profile.email = form.cleaned_data['email']
+            profile.address = form.cleaned_data['address']
+            profile.save()
             return redirect("home")
     else:
         form = StudentRegistrationForm()
@@ -50,7 +49,7 @@ def login_view(request):
                 if user.role == "STUDENT":
                     return redirect("student_home")
 
-                elif user.role == "Institute":
+                elif user.role == "INSTITUTE":
                     return redirect("/institute/dashboard/")
 
                 elif user.role == "ADMIN":
@@ -64,6 +63,32 @@ def login_view(request):
     return render(request, "login.html", {
         "form": form,
         "error": error
+    })
+
+
+def institute_login_view(request):
+    error = None
+
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            aadhaar = form.cleaned_data.get("aadhaar")
+            password = form.cleaned_data.get("password")
+
+            user = authenticate(request, aadhaar=aadhaar, password=password)
+
+            if user is not None and user.role == "INSTITUTE":
+                login(request, user)
+                return redirect("institute_dashboard")
+
+            error = "Invalid Institute Aadhaar or Password"
+    else:
+        form = LoginForm()
+
+    return render(request, "institute_login.html", {
+        "form": form,
+        "error": error,
     })
 
 
