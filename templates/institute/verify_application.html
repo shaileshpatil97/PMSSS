@@ -1,0 +1,29 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<h4>Verify Application</h4>
+
+<div class="card p-3 mb-3">
+  <div><b>Student Aadhaar:</b> {{ app.student.aadhaar }}</div>
+  <div><b>Course:</b> {{ app.course }}</div>
+  <div><b>Institute:</b> {{ app.institute_name }}</div>
+  <div><b>Year:</b> {{ app.year }}</div>
+  <div><b>Current Status:</b> {{ app.status }}</div>
+</div>
+
+<form method="post" class="card p-3">
+  {% csrf_token %}
+
+  <div class="mb-2">
+    <label class="form-label">Remarks (optional)</label>
+    <textarea class="form-control" name="remarks" rows="3">{% if verification %}{{ verification.remarks }}{% endif %}</textarea>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button class="btn btn-success" name="action" value="verify">Verify</button>
+    <button class="btn btn-danger" name="action" value="reject">Reject</button>
+    <a class="btn btn-secondary" href="{% url 'institute_applications' %}">Back</a>
+  </div>
+</form>
+
+{% endblock %}

@@ -2,10 +2,77 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 import csv
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal, InvalidOperation
+import re
 
 from .models import Institute, InstituteVerification, InstituteStudent
 from applications.models import ScholarshipApplication
 from applications.models import Notification
+
+
+def _normalize_csv_key(key: str) -> str:
+    return (key or "").strip().lower().replace(" ", "").replace("_", "")
+
+
+def _parse_year(raw_value):
+    value = str(raw_value or "").strip()
+    if not value:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        try:
+            return int(Decimal(value))
+        except (InvalidOperation, ValueError):
+            return None
+
+
+def _parse_aadhaar(raw_value):
+    value = str(raw_value or "").strip().replace("\ufeff", "")
+    if not value:
+        return None
+
+    digits = ""
+    if value.isdigit():
+        digits = value
+    else:
+        try:
+            d = Decimal(value)
+            # Convert things like 4.56985E+11 to a full integer string
+            if d == d.to_integral_value():
+                digits = format(d, "f")
+            else:
+                digits = value
+        except InvalidOperation:
+            digits = value
+
+    digits = re.sub(r"\D", "", digits)
+    if not digits:
+        return None
+
+    if len(digits) < 12:
+        digits = digits.zfill(12)
+
+    if len(digits) != 12:
+        # Avoid truncating; better to skip and let the institute fix CSV.
+        return None
+
+    return digits
+
+
+def _get_institute_or_redirect(request):
+    if getattr(request.user, "role", None) != "INSTITUTE":
+        return None, redirect("home")
+
+    institute = Institute.objects.filter(user=request.user).first()
+    if institute is None:
+        messages.error(
+            request,
+            "Institute profile not found. Please complete institute registration first.",
+        )
+        return None, redirect("home")
+
+    return institute, None
 
 
 
@@ -15,9 +82,9 @@ from applications.models import Notification
 # ===============================
 @login_required
 def institute_dashboard(request):
-    if getattr(request.user, "role", None) != "INSTITUTE":
-        return redirect("home")
-    institute = Institute.objects.get(user=request.user)
+    institute, redirect_response = _get_institute_or_redirect(request)
+    if redirect_response:
+        return redirect_response
 
     total_students = ScholarshipApplication.objects.filter(
         institute_name=institute.institute_name
@@ -58,33 +125,88 @@ def institute_dashboard(request):
 # ===============================
 @login_required
 def upload_students_csv(request):
-    try:
-        institute = Institute.objects.get(user=request.user)
-    except Institute.DoesNotExist:
-        messages.error(
-            request,
-            "Institute profile not found. Please complete institute registration first."
-        )
-        return redirect("institute_dashboard")
+    institute, redirect_response = _get_institute_or_redirect(request)
+    if redirect_response:
+        return redirect_response
 
     if request.method == "POST" and request.FILES.get("file"):
         csv_file = request.FILES["file"]
-        decoded = csv_file.read().decode("utf-8").splitlines()
-        reader = csv.DictReader(decoded)
+        decoded_lines = csv_file.read().decode("utf-8-sig", errors="replace").splitlines()
+
+        # Some exports end up "double-encoded" where each row is a single quoted column
+        # that itself contains a comma-separated line (e.g. "aadhaar,student_name,...").
+        # Detect and normalize that into proper CSV lines.
+        preview_rows = list(csv.reader(decoded_lines[:5]))
+        if preview_rows and all(len(r) == 1 for r in preview_rows) and any("," in r[0] for r in preview_rows):
+            decoded_lines = [r[0] for r in csv.reader(decoded_lines)]
+
+        reader = csv.DictReader(decoded_lines)
+
+        created_count = 0
+        updated_count = 0
+        skipped_count = 0
+        duplicate_in_file_count = 0
+        seen_aadhaars = set()
 
         for row in reader:
-            InstituteStudent.objects.get_or_create(
+            normalized_row = {
+                _normalize_csv_key(k): (v.strip() if isinstance(v, str) else v)
+                for k, v in (row or {}).items()
+            }
+
+            aadhaar = _parse_aadhaar(
+                normalized_row.get("aadhaar")
+                or normalized_row.get("aadhar")
+            )
+            student_name = (
+                normalized_row.get("studentname")
+                or normalized_row.get("name")
+                or normalized_row.get("student")
+                or ""
+            ).strip()
+            course = (normalized_row.get("course") or "").strip()
+            year = _parse_year(normalized_row.get("year") or normalized_row.get("class"))
+
+            if not aadhaar or not student_name or not course or year is None:
+                skipped_count += 1
+                continue
+
+            if aadhaar in seen_aadhaars:
+                duplicate_in_file_count += 1
+                continue
+            seen_aadhaars.add(aadhaar)
+
+            _, was_created = InstituteStudent.objects.update_or_create(
                 institute=institute,
-                aadhaar=row["aadhaar"],
+                aadhaar=aadhaar,
                 defaults={
-                    "student_name": row["student_name"],
-                    "course": row["course"],
-                    "year": row["year"],
-                }
+                    "student_name": student_name,
+                    "course": course,
+                    "year": year,
+                },
+            )
+            if was_created:
+                created_count += 1
+            else:
+                updated_count += 1
+
+        if created_count or updated_count:
+            messages.success(
+                request,
+                f"Upload complete. Created {created_count}, updated {updated_count}."
+            )
+        if duplicate_in_file_count:
+            messages.warning(
+                request,
+                f"Skipped {duplicate_in_file_count} duplicate Aadhaar rows in the CSV file."
+            )
+        if skipped_count:
+            messages.warning(
+                request,
+                f"Skipped {skipped_count} rows due to missing/invalid Aadhaar, name, course, or year."
             )
 
-        messages.success(request, "Students uploaded successfully.")
-        return redirect("institute_dashboard")
+        return redirect("institute_student_tracking")
 
     return render(request, "institute/upload_students.html")
 
@@ -94,11 +216,13 @@ def upload_students_csv(request):
 # ===============================
 @login_required
 def institute_student_tracking(request):
-    institute = Institute.objects.get(user=request.user)
+    institute, redirect_response = _get_institute_or_redirect(request)
+    if redirect_response:
+        return redirect_response
 
     applied_aadhaars = ScholarshipApplication.objects.filter(
         institute_name=institute.institute_name
-    ).values_list("student__aadhaar", flat=True)
+    ).values_list("student__aadhaar", flat=True).distinct()
 
     filled_students = InstituteStudent.objects.filter(
         institute=institute,
@@ -122,7 +246,9 @@ def institute_student_tracking(request):
 # ===============================
 @login_required
 def institute_applications(request):
-    institute = Institute.objects.get(user=request.user)
+    institute, redirect_response = _get_institute_or_redirect(request)
+    if redirect_response:
+        return redirect_response
 
     apps = ScholarshipApplication.objects.filter(
         institute_name=institute.institute_name,
@@ -143,7 +269,9 @@ def institute_applications(request):
 
 @login_required
 def institute_verify_application(request, application_id):
-    institute = Institute.objects.get(user=request.user)
+    institute, redirect_response = _get_institute_or_redirect(request)
+    if redirect_response:
+        return redirect_response
     application = get_object_or_404(ScholarshipApplication, id=application_id)
 
     if application.institute_name != institute.institute_name:

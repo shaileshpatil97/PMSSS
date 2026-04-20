@@ -1,12 +1,48 @@
 from django.shortcuts import render, redirect
-from .forms import StudentRegistrationForm
-from .models import User, StudentProfile
-from .forms import LoginForm
+
 from django.contrib.auth import authenticate, login
-from .models import StudentProfile
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from applications.models import ScholarshipApplication , ScholarshipScheme , Notification
+from django.contrib.auth.hashers import identify_hasher
+
+from applications.models import ScholarshipApplication, ScholarshipScheme, Notification
+
+from .forms import LoginForm, StudentRegistrationForm
+from .models import StudentProfile, User
+
+
+def _authenticate_aadhaar_password(request, aadhaar: str, password: str):
+    """Authenticate using Aadhaar+password.
+
+    Also supports a one-time upgrade of legacy plaintext passwords that may exist
+    in the DB (i.e., `user.password` is not a valid Django-encoded hash).
+    """
+
+    if not aadhaar or not password:
+        return None
+
+    # Prefer the standard keyword, but keep backward compatibility.
+    user = authenticate(request, username=aadhaar, password=password)
+    if user is None:
+        user = authenticate(request, aadhaar=aadhaar, password=password)
+    if user is not None:
+        return user
+
+    candidate = User.objects.filter(aadhaar=aadhaar).first()
+    if candidate is None or not getattr(candidate, "is_active", True):
+        return None
+
+    # If the stored password isn't a valid encoded hash, and it matches the
+    # submitted password, upgrade it to a proper hash.
+    try:
+        identify_hasher(candidate.password)
+        return None
+    except ValueError:
+        if candidate.password == password:
+            candidate.set_password(password)
+            candidate.save(update_fields=["password"])
+            return authenticate(request, username=aadhaar, password=password)
+
+    return None
 
 
 def register(request):
@@ -41,7 +77,7 @@ def login_view(request):
             aadhaar = form.cleaned_data.get("aadhaar")
             password = form.cleaned_data.get("password")
 
-            user = authenticate(request, aadhaar=aadhaar, password=password)
+            user = _authenticate_aadhaar_password(request, aadhaar=aadhaar, password=password)
 
             if user is not None:
                 login(request, user)
@@ -76,7 +112,7 @@ def institute_login_view(request):
             aadhaar = form.cleaned_data.get("aadhaar")
             password = form.cleaned_data.get("password")
 
-            user = authenticate(request, aadhaar=aadhaar, password=password)
+            user = _authenticate_aadhaar_password(request, aadhaar=aadhaar, password=password)
 
             if user is not None and user.role == "INSTITUTE":
                 login(request, user)
@@ -194,13 +230,19 @@ def notifications(request):
 
 @login_required
 def all_schemes(request):
-    profile = StudentProfile.objects.get(student=request.user)
+    profile = StudentProfile.objects.filter(student=request.user).first()
+    if profile is None:
+        return redirect("profile_personal")
 
-    schemes = ScholarshipScheme.objects.filter(
-        min_income__lte = profile.income,
-        caste = profile.caste,
-        course = profile.course
-    )
+    # If the student hasn't completed the profile yet, avoid filtering with None.
+    if profile.income is None or not profile.caste or not profile.course:
+        schemes = ScholarshipScheme.objects.none()
+    else:
+        schemes = ScholarshipScheme.objects.filter(
+            min_income__lte=profile.income,
+            caste=profile.caste,
+            course=profile.course,
+        )
 
     return render(request, "schemes.html", {"schemes": schemes})
 
