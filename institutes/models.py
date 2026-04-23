@@ -70,19 +70,3 @@ class InstituteStudent(models.Model):
 
     def __str__(self):
         return f"{self.student_name} ({self.aadhaar})"
-
-class InstituteStudent(models.Model):
-    institute = models.ForeignKey(
-        Institute,
-        on_delete=models.CASCADE
-    )
-    aadhaar = models.CharField(max_length=12)
-    student_name = models.CharField(max_length=100)
-    course = models.CharField(max_length=100)
-    year = models.IntegerField()
-
-    class Meta:
-        unique_together = ("institute", "aadhaar")
-
-    def __str__(self):
-        return f"{self.student_name} ({self.aadhaar})"

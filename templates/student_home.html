@@ -1,28 +1,77 @@
 {% extends "layout/base.html" %}
 {% block content %}
 
-<div class="bg-success text-white p-2 mb-3">
-Profile Completeness : 100%
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="glass-card p-4 d-flex justify-content-between align-items-center border-0" style="background: linear-gradient(to right, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)); border-left: 4px solid #10B981 !important;">
+            <div>
+                <h4 class="mb-1 fw-bold text-white">Student Dashboard</h4>
+                <p class="text-muted-modern mb-0">Manage your profile and track scholarship applications</p>
+            </div>
+            <div class="pe-3 text-end">
+                <span class="text-muted-modern small text-uppercase fw-semibold">Profile Completeness</span>
+                <h3 class="mb-0 text-accent fw-bold" style="letter-spacing: -1px;">100%</h3>
+            </div>
+        </div>
+    </div>
 </div>
 
-<h5>Suggested Eligible Schemes</h5>
+<div class="row mb-5">
+    <div class="col-12">
+        <h5 class="fw-bold mb-4 text-white">Suggested Eligible Schemes</h5>
+        <div class="glass-card p-0 overflow-hidden shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-dark table-borderless table-hover mb-0" style="background: transparent;">
+                    <thead style="background: rgba(255,255,255,0.03); border-bottom: 2px solid rgba(255,255,255,0.1);">
+                        <tr><th class="py-3 px-4 text-uppercase small text-muted-modern fw-bold tracking-wide">Scheme</th><th class="py-3 px-4 text-uppercase small text-muted-modern fw-bold tracking-wide">Department</th><th class="py-3 px-4 text-end text-uppercase small text-muted-modern fw-bold tracking-wide">Action</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td class="py-3 px-4 fw-medium text-white">Post Matric Scholarship</td>
+                            <td class="py-3 px-4 text-muted-modern align-middle">Social Welfare</td>
+                            <td class="py-3 px-4 text-end"><a href="/apply/" class="btn btn-sm btn-modern rounded-pill px-4" style="box-shadow: none;">Apply Now</a></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 fw-medium text-white">Tuition Fee Reimbursement</td>
+                            <td class="py-3 px-4 text-muted-modern align-middle">Minority Welfare</td>
+                            <td class="py-3 px-4 text-end"><a href="/apply/" class="btn btn-sm btn-outline-light rounded-pill px-4" style="border: 2px solid rgba(255,255,255,0.2);">Apply Now</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table class="table table-bordered bg-white">
-<tr><th>Scheme</th><th>Department</th><th>Action</th></tr>
-<tr><td>Post Matric Scholarship</td><td>Social Welfare</td><td><a href="/apply/" class="btn btn-sm btn-primary">Apply</a></td></tr>
-<tr><td>Tuition Fee Reimbursement</td><td>Minority Welfare</td><td><a href="/apply/" class="btn btn-sm btn-primary">Apply</a></td></tr>
-</table>
-
-<hr>
-
-<h5>My Applications</h5>
-<table class="table table-bordered bg-white">
-<tr><th>Course</th><th>Institute</th><th>Year</th><th>Status</th></tr>
-{% for a in request.user.scholarshipapplication_set.all %}
-<tr>
-<td>{{a.course}}</td><td>{{a.institute_name}}</td><td>{{a.year}}</td><td>{{a.status}}</td>
-</tr>
-{% endfor %}
-</table>
+<div class="row">
+    <div class="col-12">
+        <h5 class="fw-bold mb-4 text-white">My Applications</h5>
+        <div class="glass-card p-0 overflow-hidden shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-dark table-borderless table-hover mb-0" style="background: transparent;">
+                    <thead style="background: rgba(255,255,255,0.03); border-bottom: 2px solid rgba(255,255,255,0.1);">
+                        <tr><th class="py-3 px-4 text-uppercase small text-muted-modern fw-bold">Course</th><th class="py-3 px-4 text-uppercase small text-muted-modern fw-bold">Institute</th><th class="py-3 px-4 text-uppercase small text-muted-modern fw-bold">Year</th><th class="py-3 px-4 text-end text-uppercase small text-muted-modern fw-bold">Status</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for a in request.user.scholarshipapplication_set.all %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td class="py-3 px-4 fw-medium text-white">{{a.course}}</td>
+                            <td class="py-3 px-4 text-muted-modern align-middle">{{a.institute_name}}</td>
+                            <td class="py-3 px-4 align-middle">{{a.year}}</td>
+                            <td class="py-3 px-4 text-end align-middle">
+                                <span class="badge {% if a.status == 'APPROVED' %}bg-success{% elif a.status == 'CANCELLED' %}bg-danger{% else %}bg-warning text-dark{% endif %} px-3 py-2 rounded-pill shadow-sm small fw-bold">{{a.status}}</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted-modern">You have not submitted any applications yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

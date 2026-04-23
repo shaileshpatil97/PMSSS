@@ -2,10 +2,16 @@ from django.contrib import admin
 from django.urls import path
 from home.views import home ,student_home
 from accounts.views import register , profile_personal
-from accounts.views import login_view
+from accounts.views import login_view, institute_login_view
 from applications.views import new_application ,student_dashboard
 from django.urls import include
-from institutes.views import institute_dashboard , upload_students_csv , institute_student_tracking , rejected_applications
+from institutes.views import (
+    institute_dashboard,
+    upload_students_csv,
+    institute_student_tracking,
+    institute_applications,
+    institute_verify_application,
+)
 
 
 urlpatterns = [
@@ -14,6 +20,7 @@ urlpatterns = [
     path("register/", register, name="register"),
     path("admin/", admin.site.urls),
     path("login/", login_view, name="login"),
+    path("institute/login/", institute_login_view, name="institute_login"),
     path("apply/", new_application, name="apply"),
     path("mock/digilocker/", include("digilocker_mock.urls")),
     path("mock/applisarkar/", include("applisarkar_mock.urls")),
@@ -23,7 +30,8 @@ urlpatterns = [
     path("institute/dashboard/", institute_dashboard, name="institute_dashboard"),
     path("institute/upload-students/", upload_students_csv, name="upload_students"),
     path("institute/student-tracking/",institute_student_tracking,name="institute_student_tracking"),
-    path("institute/rejected-applications/", rejected_applications, name="rejected_applications"),
+    path("institute/applications/", institute_applications, name="institute_applications"),
+    path("institute/applications/<uuid:application_id>/", institute_verify_application, name="institute_verify_application"),
 
 
 

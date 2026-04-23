@@ -1,12 +1,48 @@
 from django.shortcuts import render, redirect
-from .forms import StudentRegistrationForm
-from .models import User, StudentProfile
-from .forms import LoginForm
+
 from django.contrib.auth import authenticate, login
-from .models import StudentProfile
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from applications.models import ScholarshipApplication , ScholarshipScheme , Notification
+from django.contrib.auth.hashers import identify_hasher
+
+from applications.models import ScholarshipApplication, ScholarshipScheme, Notification
+
+from .forms import LoginForm, StudentRegistrationForm
+from .models import StudentProfile, User
+
+
+def _authenticate_aadhaar_password(request, aadhaar: str, password: str):
+    """Authenticate using Aadhaar+password.
+
+    Also supports a one-time upgrade of legacy plaintext passwords that may exist
+    in the DB (i.e., `user.password` is not a valid Django-encoded hash).
+    """
+
+    if not aadhaar or not password:
+        return None
+
+    # Prefer the standard keyword, but keep backward compatibility.
+    user = authenticate(request, username=aadhaar, password=password)
+    if user is None:
+        user = authenticate(request, aadhaar=aadhaar, password=password)
+    if user is not None:
+        return user
+
+    candidate = User.objects.filter(aadhaar=aadhaar).first()
+    if candidate is None or not getattr(candidate, "is_active", True):
+        return None
+
+    # If the stored password isn't a valid encoded hash, and it matches the
+    # submitted password, upgrade it to a proper hash.
+    try:
+        identify_hasher(candidate.password)
+        return None
+    except ValueError:
+        if candidate.password == password:
+            candidate.set_password(password)
+            candidate.save(update_fields=["password"])
+            return authenticate(request, username=aadhaar, password=password)
+
+    return None
 
 
 def register(request):
@@ -18,14 +54,13 @@ def register(request):
                 password=form.cleaned_data['password'],
                 role="STUDENT"
             )
-            StudentProfile.objects.create(
-                student=user,
-                full_name=form.cleaned_data['full_name'],
-                dob=form.cleaned_data['dob'],
-                mobile=form.cleaned_data['mobile'],
-                email=form.cleaned_data['email'],
-                address=form.cleaned_data['address']
-            )
+            profile, _ = StudentProfile.objects.get_or_create(student=user)
+            profile.full_name = form.cleaned_data['full_name']
+            profile.dob = form.cleaned_data['dob']
+            profile.mobile = form.cleaned_data['mobile']
+            profile.email = form.cleaned_data['email']
+            profile.address = form.cleaned_data['address']
+            profile.save()
             return redirect("home")
     else:
         form = StudentRegistrationForm()
@@ -42,7 +77,7 @@ def login_view(request):
             aadhaar = form.cleaned_data.get("aadhaar")
             password = form.cleaned_data.get("password")
 
-            user = authenticate(request, aadhaar=aadhaar, password=password)
+            user = _authenticate_aadhaar_password(request, aadhaar=aadhaar, password=password)
 
             if user is not None:
                 login(request, user)
@@ -50,7 +85,7 @@ def login_view(request):
                 if user.role == "STUDENT":
                     return redirect("student_home")
 
-                elif user.role == "Institute":
+                elif user.role == "INSTITUTE":
                     return redirect("/institute/dashboard/")
 
                 elif user.role == "ADMIN":
@@ -64,6 +99,32 @@ def login_view(request):
     return render(request, "login.html", {
         "form": form,
         "error": error
+    })
+
+
+def institute_login_view(request):
+    error = None
+
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            aadhaar = form.cleaned_data.get("aadhaar")
+            password = form.cleaned_data.get("password")
+
+            user = _authenticate_aadhaar_password(request, aadhaar=aadhaar, password=password)
+
+            if user is not None and user.role == "INSTITUTE":
+                login(request, user)
+                return redirect("institute_dashboard")
+
+            error = "Invalid Institute Aadhaar or Password"
+    else:
+        form = LoginForm()
+
+    return render(request, "institute_login.html", {
+        "form": form,
+        "error": error,
     })
 
 
@@ -169,13 +230,19 @@ def notifications(request):
 
 @login_required
 def all_schemes(request):
-    profile = StudentProfile.objects.get(student=request.user)
+    profile = StudentProfile.objects.filter(student=request.user).first()
+    if profile is None:
+        return redirect("profile_personal")
 
-    schemes = ScholarshipScheme.objects.filter(
-        min_income__lte = profile.income,
-        caste = profile.caste,
-        course = profile.course
-    )
+    # If the student hasn't completed the profile yet, avoid filtering with None.
+    if profile.income is None or not profile.caste or not profile.course:
+        schemes = ScholarshipScheme.objects.none()
+    else:
+        schemes = ScholarshipScheme.objects.filter(
+            min_income__lte=profile.income,
+            caste=profile.caste,
+            course=profile.course,
+        )
 
     return render(request, "schemes.html", {"schemes": schemes})
 

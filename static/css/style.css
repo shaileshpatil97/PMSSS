@@ -1,0 +1,171 @@
+/* static/css/style.css */
+
+/* Modern CSS Variables */
+:root {
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Primary Vibrant Colors */
+  --color-primary: #4F46E5; /* Indigo */
+  --color-primary-dark: #3730A3;
+  --color-accent: #10B981; /* Emerald */
+  --color-accent-dark: #059669;
+  
+  /* Background Gradients */
+  --bg-gradient-start: #0f172a; /* Slate 900 */
+  --bg-gradient-end: #1e1b4b; /* Indigo 950 */
+  --bg-gradient-accent: #312e81; /* Indigo 800 */
+  
+  /* Glassmorphism Constants */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-blur: blur(12px);
+
+  /* Typography */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+}
+
+/* Base Styles */
+body {
+  font-family: var(--font-family-sans);
+  color: var(--text-main);
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Animation */
+.bg-gradient-modern {
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end), var(--bg-gradient-accent));
+  background-size: 200% 200%;
+  animation: gradientFlow 15s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Typography Utilities */
+.text-accent {
+  color: var(--color-accent) !important;
+}
+.text-muted-modern {
+  color: var(--text-muted) !important;
+}
+
+/* Glassmorphism Navbar */
+.glass-navbar {
+  background: rgba(15, 23, 42, 0.7) !important; /* Slight dark tint */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Glassmorphism Card Container */
+.glass-card {
+  background: var(--glass-bg);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Form Styling - Replacing default bootstrap */
+.glass-card input[type="text"],
+.glass-card input[type="password"],
+.glass-card input[type="email"],
+.glass-card input[type="number"],
+.glass-card input[type="date"],
+.glass-card input[type="tel"],
+.glass-card select,
+.glass-card textarea {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.glass-card input:focus,
+.glass-card select:focus,
+.glass-card textarea:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+  color: #fff;
+}
+
+.glass-card input::placeholder,
+.glass-card textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Labels */
+.glass-card label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-modern {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+  background: linear-gradient(135deg, #5c54ed, var(--color-primary));
+  color: white;
+}
+
+.btn-modern:active {
+  transform: translateY(1px);
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Link overrides */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #34d399; /* Emerald 400 */
+}

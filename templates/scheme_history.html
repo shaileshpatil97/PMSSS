@@ -1,0 +1,27 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<h4>Application History</h4>
+
+<table class="table table-bordered bg-white">
+	<tr>
+		<th>Course</th>
+		<th>Institute</th>
+		<th>Year</th>
+		<th>Status</th>
+		<th>Created</th>
+	</tr>
+	{% for a in apps %}
+	<tr>
+		<td>{{ a.course }}</td>
+		<td>{{ a.institute_name }}</td>
+		<td>{{ a.year }}</td>
+		<td>{{ a.status }}</td>
+		<td>{{ a.created_at }}</td>
+	</tr>
+	{% empty %}
+	<tr><td colspan="5">No history yet.</td></tr>
+	{% endfor %}
+</table>
+
+{% endblock %}
