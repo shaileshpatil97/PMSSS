@@ -1,0 +1,68 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <!-- Progress Steps -->
+        {% include 'profile/_stepper.html' with step=1 %}
+
+        <div class="glass-card p-4 p-md-5 shadow-lg border-0" style="background: #ffffff;">
+            <h4 class="fw-bold mb-4 pb-3" style="border-bottom: 1px solid #d2d2d7; color: #1d1d1f;">Personal
+                Information</h4>
+
+            <form method="post" action="{% url 'profile_personal' %}" class="mt-4">
+                {% csrf_token %}
+
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Full
+                            Name</label>
+                        <input type="text" name="full_name" value="{{profile.full_name|default:''}}"
+                            class="form-control" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Date
+                            of Birth</label>
+                        <input type="date" name="dob" value="{{profile.dob|date:'Y-m-d'|default:''}}"
+                            class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label
+                            class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Gender</label>
+                        <select name="gender" class="form-select">
+                            <option value="">Select Gender</option>
+                            <option value="Male" {% if profile.gender == "Male" %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if profile.gender == "Female" %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if profile.gender == "Other" %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label
+                            class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Mobile
+                            Number</label>
+                        <input type="tel" name="mobile" value="{{profile.mobile|default:''}}" class="form-control"
+                            required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label
+                            class="form-label text-muted-modern small text-uppercase tracking-wide fw-bold mb-2">Email
+                            Address</label>
+                        <input type="email" name="email" value="{{profile.email|default:''}}" class="form-control"
+                            required placeholder="your.email@example.com">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-5 pt-4" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                    <button type="submit" class="btn btn-modern px-5 py-2 rounded-pill fw-bold">Save & Next <span
+                            class="ms-2">→</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container py-2">
+    <div class="mx-auto mb-4" style="max-width: 700px;">
+        {% include 'profile/_stepper.html' with step=5 %}
+    </div>
+    <div class="glass-card p-4 p-md-5 mx-auto fade-in" style="max-width: 600px;">
+        <h2 class="text-center mb-3 fw-bold">Past Qualification</h2>
+        <p class="text-center text-muted-modern mb-4">Enter the details of your previous completed education.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label for="last_qualification">Last Completed Qualification</label>
+                <select id="last_qualification" name="last_qualification" required>
+                    <option value="" disabled {% if not profile.last_qualification %}selected{% endif %}>Select Qualification</option>
+                    <option value="10" {% if profile.last_qualification == '10' or profile.last_qualification == '10th' %}selected{% endif %}>10th Standard / SSC</option>
+                    <option value="12" {% if profile.last_qualification == '12' or profile.last_qualification == '12th' %}selected{% endif %}>12th Standard / HSC</option>
+                    <option value="Diploma" {% if profile.last_qualification == 'Diploma' %}selected{% endif %}>Diploma</option>
+                    <option value="Degree" {% if profile.last_qualification == 'Degree' %}selected{% endif %}>Undergraduate Degree</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-modern w-100 mt-2">Save & Next</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

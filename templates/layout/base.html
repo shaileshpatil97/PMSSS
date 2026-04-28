@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMSSS Scholarship Dashboard</title>
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+/* Sidebar overrides */
+.glass-sidebar {
+    background: #ffffff;
+    border-right: 1px solid #d2d2d7;
+    min-height: calc(100vh - 66px);
+}
+.glass-sidebar a {
+    display: block;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    text-decoration: none;
+    color: #1d1d1f;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 400;
+}
+.glass-sidebar a:hover, .glass-sidebar a.active {
+    background: #f5f5f7;
+    color: #0066cc;
+    padding-left: 28px;
+    border-left: 4px solid #0066cc;
+    font-weight: 500;
+}
+.glass-sidebar a:active {
+    transform: scale(0.96);
+    background: #e0e0e0;
+}
+</style>
+</head>
+<body class="bg-gradient-modern m-0 p-0">
+
+<div class="top-nav-glass text-white p-3 px-4 d-flex justify-content-between align-items-center sticky-top shadow-sm">
+    <a href="/" class="text-decoration-none"><span class="fs-5 fw-bold text-white">PMSSS <span class="text-accent">Portal</span></span></a>
+    <div class="d-flex align-items-center">
+        <span class="badge bg-primary px-3 py-2 rounded-pill shadow-sm fw-medium d-none d-md-block">
+            <i class="me-1"></i> User: {{ request.user.aadhaar }}
+        </span>
+        <a href="/login/" class="btn btn-sm btn-outline-light ms-3 rounded-pill px-4">Logout</a>
+    </div>
+</div>
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 glass-sidebar">
+            <a href="{% url 'student_home' %}" class="{% if request.resolver_match.url_name == 'student_home' %}active{% endif %}">Dashboard</a>
+            <a href="{% url 'profile_personal' %}" class="{% if 'profile' in request.path %}active{% endif %}">Profile Settings</a>
+            <a href="{% url 'all_schemes' %}" class="{% if request.resolver_match.url_name == 'all_schemes' %}active{% endif %}">All Schemes</a>
+            <a href="{% url 'my_applied' %}" class="{% if request.resolver_match.url_name == 'my_applied' %}active{% endif %}">Applied Schemes</a>
+            <a href="{% url 'my_cancelled' %}" class="{% if request.resolver_match.url_name == 'my_cancelled' %}active{% endif %}">Cancelled Schemes</a>
+            <a href="{% url 'notifications' %}" class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">Notifications</a>
+            <a href="{% url 'scheme_history' %}" class="{% if request.resolver_match.url_name == 'scheme_history' %}active{% endif %}">Scheme History</a>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-md-9 col-lg-10 p-4 p-md-5 fade-in dashboard-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

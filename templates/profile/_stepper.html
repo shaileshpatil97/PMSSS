@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-between mb-5 px-1 position-relative d-none d-md-flex">
+    <div class="position-absolute top-50 start-0 end-0 translate-middle-y"
+        style="height: 2px; background: #e0e0e0; z-index: 0; left: 8% !important; right: 8% !important;">
+    </div>
+    
+    <!-- Step 1 -->
+    <div class="text-center position-relative" style="z-index: 1;">
+        <div class="{% if step >= 1 %}text-white{% else %}text-muted{% endif %} rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+            style="width: 40px; height: 40px; background: {% if step >= 1 %}var(--color-accent){% else %}#f5f5f7{% endif %}; {% if step == 1 %}font-weight: bold; border: 4px solid rgba(0, 102, 204, 0.2);{% else %}border: 3px solid #ffffff;{% endif %} transition: all 0.3s ease;">
+            1</div>
+        <small class="{% if step >= 1 %}fw-medium{% else %}text-muted-modern{% endif %} tracking-wide text-uppercase"
+            style="color: {% if step >= 1 %}#1d1d1f{% else %}#86868b{% endif %}; font-size: 0.7rem;">Personal</small>
+    </div>
+    
+    <!-- Step 2 -->
+    <div class="text-center position-relative" style="z-index: 1;">
+        <div class="{% if step >= 2 %}text-white{% else %}text-muted{% endif %} rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+            style="width: 40px; height: 40px; background: {% if step >= 2 %}var(--color-accent){% else %}#f5f5f7{% endif %}; {% if step == 2 %}font-weight: bold; border: 4px solid rgba(0, 102, 204, 0.2);{% else %}border: 3px solid #ffffff;{% endif %} transition: all 0.3s ease;">
+            2</div>
+        <small class="{% if step >= 2 %}fw-medium{% else %}text-muted-modern{% endif %} tracking-wide text-uppercase"
+            style="color: {% if step >= 2 %}#1d1d1f{% else %}#86868b{% endif %}; font-size: 0.7rem;">Address</small>
+    </div>
+    
+    <!-- Step 3 -->
+    <div class="text-center position-relative" style="z-index: 1;">
+        <div class="{% if step >= 3 %}text-white{% else %}text-muted{% endif %} rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+            style="width: 40px; height: 40px; background: {% if step >= 3 %}var(--color-accent){% else %}#f5f5f7{% endif %}; {% if step == 3 %}font-weight: bold; border: 4px solid rgba(0, 102, 204, 0.2);{% else %}border: 3px solid #ffffff;{% endif %} transition: all 0.3s ease;">
+            3</div>
+        <small class="{% if step >= 3 %}fw-medium{% else %}text-muted-modern{% endif %} tracking-wide text-uppercase"
+            style="color: {% if step >= 3 %}#1d1d1f{% else %}#86868b{% endif %}; font-size: 0.7rem;">Other</small>
+    </div>
+    
+    <!-- Step 4 -->
+    <div class="text-center position-relative" style="z-index: 1;">
+        <div class="{% if step >= 4 %}text-white{% else %}text-muted{% endif %} rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+            style="width: 40px; height: 40px; background: {% if step >= 4 %}var(--color-accent){% else %}#f5f5f7{% endif %}; {% if step == 4 %}font-weight: bold; border: 4px solid rgba(0, 102, 204, 0.2);{% else %}border: 3px solid #ffffff;{% endif %} transition: all 0.3s ease;">
+            4</div>
+        <small class="{% if step >= 4 %}fw-medium{% else %}text-muted-modern{% endif %} tracking-wide text-uppercase"
+            style="color: {% if step >= 4 %}#1d1d1f{% else %}#86868b{% endif %}; font-size: 0.7rem;">Course</small>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="text-center position-relative" style="z-index: 1;">
+        <div class="{% if step >= 5 %}text-white{% else %}text-muted{% endif %} rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+            style="width: 40px; height: 40px; background: {% if step >= 5 %}var(--color-accent){% else %}#f5f5f7{% endif %}; {% if step == 5 %}font-weight: bold; border: 4px solid rgba(0, 102, 204, 0.2);{% else %}border: 3px solid #ffffff;{% endif %} transition: all 0.3s ease;">
+            5</div>
+        <small class="{% if step >= 5 %}fw-medium{% else %}text-muted-modern{% endif %} tracking-wide text-uppercase"
+            style="color: {% if step >= 5 %}#1d1d1f{% else %}#86868b{% endif %}; font-size: 0.7rem;">Academic</small>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="text-center position-relative" style="z-index: 1;">
+        <div class="{% if step >= 6 %}text-white{% else %}text-muted{% endif %} rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+            style="width: 40px; height: 40px; background: {% if step >= 6 %}var(--color-accent){% else %}#f5f5f7{% endif %}; {% if step == 6 %}font-weight: bold; border: 4px solid rgba(0, 102, 204, 0.2);{% else %}border: 3px solid #ffffff;{% endif %} transition: all 0.3s ease;">
+            6</div>
+        <small class="{% if step >= 6 %}fw-medium{% else %}text-muted-modern{% endif %} tracking-wide text-uppercase"
+            style="color: {% if step >= 6 %}#1d1d1f{% else %}#86868b{% endif %}; font-size: 0.7rem;">Hostel</small>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<h4>Applications for Verification</h4>
+
+<table class="table table-bordered bg-white">
+  <tr>
+    <th>Student Aadhaar</th>
+    <th>Course</th>
+    <th>Year</th>
+    <th>Status</th>
+    <th>Institute Status</th>
+    <th>Action</th>
+  </tr>
+  {% for a, v in rows %}
+  <tr>
+    <td>{{ a.student.aadhaar }}</td>
+    <td>{{ a.course }}</td>
+    <td>{{ a.year }}</td>
+    <td>{{ a.status }}</td>
+    <td>
+      {% if v %}{{ v.status }}{% else %}PENDING{% endif %}
+    </td>
+    <td>
+      <a class="btn btn-sm btn-primary" href="{% url 'institute_verify_application' a.id %}">Open</a>
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="6">No applications pending.</td></tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "layout/base.html" %}
+{% block content %}
+
+<h4>Student Scholarship Tracking</h4>
+
+<hr>
+
+<h5 class="text-success">✅ Students Who Filled Scholarship Form</h5>
+<a href="/institute/student-tracking/" class="btn btn-primary mt-3">
+    View Filled / Not Filled Students
+</a>
+<a href="{% url 'upload_students' %}" class="btn btn-primary">
+    Upload Students CSV
+</a>
+<table class="table table-bordered bg-white">
+    <tr>
+        <th>Aadhaar</th>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Year</th>
+    </tr>
+    {% for s in filled_students %}
+    <tr>
+        <td>{{ s.aadhaar }}</td>
+        <td>{{ s.student_name }}</td>
+        <td>{{ s.course }}</td>
+        <td>{{ s.year }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">No students have filled the form yet.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<h5 class="text-danger">⏳ Students Who Have NOT Filled Scholarship Form</h5>
+
+<table class="table table-bordered bg-white">
+    <tr>
+        <th>Aadhaar</th>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Year</th>
+    </tr>
+    {% for s in not_filled_students %}
+    <tr>
+        <td>{{ s.aadhaar }}</td>
+        <td>{{ s.student_name }}</td>
+        <td>{{ s.course }}</td>
+        <td>{{ s.year }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">All students have filled the form 🎉</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

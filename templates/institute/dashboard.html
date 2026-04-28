@@ -1,0 +1,56 @@
+{% extends "layout/institute_base.html" %}
+{% block content %}
+
+<h4>Institute Dashboard</h4>
+
+<div class="row">
+
+<div class="col-md-3">
+  <div class="card p-3 bg-light">
+    <h6>Total Registered Students</h6>
+    <h3>{{ total_students }}</h3>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="card p-3 bg-info text-white">
+    <h6>Forms Submitted</h6>
+    <h3>{{ submitted }}</h3>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="card p-3 bg-warning">
+    <h6>Pending Verification</h6>
+    <h3>{{ pending }}</h3>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="card p-3 bg-success text-white">
+    <h6>Verified</h6>
+    <h3>{{ verified }}</h3>
+  </div>
+</div>
+
+<div class="col-md-3 mt-3">
+  <div class="card p-3 bg-danger text-white">
+    <h6>Rejected</h6>
+    <h3>{{ rejected }}</h3>
+  </div>
+</div>
+
+<div class="mt-3 d-flex gap-2">
+  <a href="{% url 'institute_applications' %}" class="btn btn-primary">
+    Verify / Reject Applications
+  </a>
+  <a href="{% url 'institute_student_tracking' %}" class="btn btn-outline-primary">
+    Filled / Not Filled Students
+  </a>
+  <a href="{% url 'upload_students' %}" class="btn btn-outline-primary">
+    Upload Students CSV
+  </a>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="fade-in motion-container">
+    <h4 class="fw-bold mb-4 motion-item" style="font-size: 34px; letter-spacing: -0.015em;">Application History</h4>
+
+    <div class="glass-card overflow-hidden motion-item">
+        <div class="table-responsive">
+            <table class="table mb-0 align-middle" style="--bs-table-bg: transparent;">
+                <thead style="background: #f5f5f7;">
+                    <tr>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider" style="border-bottom: 1px solid #d2d2d7;">Course</th>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider" style="border-bottom: 1px solid #d2d2d7;">Institute</th>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider" style="border-bottom: 1px solid #d2d2d7;">Year</th>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider" style="border-bottom: 1px solid #d2d2d7;">Status</th>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider text-end" style="border-bottom: 1px solid #d2d2d7;">Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in apps %}
+                    <tr class="motion-row" style="border-bottom: 1px solid #f0f0f0;">
+                        <td class="px-4 py-3 fw-medium">{{ a.course }}</td>
+                        <td class="px-4 py-3 text-muted-modern">{{ a.institute_name }}</td>
+                        <td class="px-4 py-3 text-muted-modern">{{ a.year }}</td>
+                        <td class="px-4 py-3">
+                            {% if a.status == 'REJECTED' %}
+                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 fw-medium border border-danger border-opacity-25 shadow-sm">{{a.status}}</span>
+                            {% elif a.status == 'APPROVED' %}
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 fw-medium border border-success border-opacity-25 shadow-sm">{{a.status}}</span>
+                            {% else %}
+                                <span class="badge bg-warning bg-opacity-10 text-warning-emphasis rounded-pill px-3 py-2 fw-medium border border-warning border-opacity-25 shadow-sm">{{a.status}}</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-muted-modern text-end">{{ a.created_at|date:"M d, Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-4 py-5 text-center" style="border-bottom: none;">
+                            <div class="fs-1 opacity-50 mb-3 motion-empty">🕰️</div>
+                            <h5 class="fw-medium">No History Found</h5>
+                            <p class="text-muted-modern mb-0">You haven't submitted any applications yet.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Framer Motion Vanilla JS Micro-animations -->
+<script type="module">
+    import { animate, stagger, spring } from "https://esm.sh/framer-motion@11.11.13";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Animate container and header
+        animate(
+            ".motion-item",
+            { opacity: [0, 1], y: [20, 0] },
+            { delay: stagger(0.1), duration: 0.6, easing: "ease-out" }
+        );
+
+        // Animate table rows staggering in
+        const rows = document.querySelectorAll(".motion-row");
+        if (rows.length > 0) {
+            animate(
+                rows,
+                { opacity: [0, 1], x: [-10, 0] },
+                { delay: stagger(0.05, { startDelay: 0.3 }), duration: 0.5, easing: "ease-out" }
+            );
+            
+            // Add subtle hover effects to rows
+            rows.forEach(row => {
+                row.addEventListener("mouseenter", () => {
+                    row.style.backgroundColor = "#fafafc";
+                });
+                row.addEventListener("mouseleave", () => {
+                    row.style.backgroundColor = "transparent";
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

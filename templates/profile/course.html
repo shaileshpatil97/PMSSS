@@ -1,0 +1,40 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container py-2">
+    <div class="mx-auto mb-4" style="max-width: 700px;">
+        {% include 'profile/_stepper.html' with step=4 %}
+    </div>
+    <div class="glass-card p-4 p-md-5 mx-auto fade-in" style="max-width: 600px;">
+        <h2 class="text-center mb-3 fw-bold">Current Course</h2>
+        <p class="text-center text-muted-modern mb-4">Provide details about your current academic course.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="course">Course Name</label>
+                <input type="text" id="course" name="course" value="{{profile.course}}" placeholder="e.g. B.Tech Computer Science" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="institute">Institute Name</label>
+                <input type="text" id="institute" name="institute" value="{{profile.institute}}" placeholder="Enter your college/institute name" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="year">Current Year</label>
+                <select id="year" name="year" required>
+                    <option value="" disabled {% if not profile.year %}selected{% endif %}>Select Current Year</option>
+                    <option value="1" {% if profile.year == '1' %}selected{% endif %}>1st Year</option>
+                    <option value="2" {% if profile.year == '2' %}selected{% endif %}>2nd Year</option>
+                    <option value="3" {% if profile.year == '3' %}selected{% endif %}>3rd Year</option>
+                    <option value="4" {% if profile.year == '4' %}selected{% endif %}>4th Year</option>
+                    <option value="5" {% if profile.year == '5' %}selected{% endif %}>5th Year</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-modern w-100 mt-2">Save & Next</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

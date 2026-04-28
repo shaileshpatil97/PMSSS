@@ -1,0 +1,45 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container py-2">
+    <div class="mx-auto mb-4" style="max-width: 700px;">
+        {% include 'profile/_stepper.html' with step=2 %}
+    </div>
+    <div class="glass-card p-4 p-md-5 mx-auto fade-in" style="max-width: 600px;">
+        <h2 class="text-center mb-3 fw-bold">Address Information</h2>
+        <p class="text-center text-muted-modern mb-4">Please provide your complete residential details.</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="address">Full Address</label>
+                <textarea id="address" name="address" rows="3" placeholder="Enter your full street address..."
+                    required>{{profile.address}}</textarea>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12 mb-3 mb-md-0">
+                    <label for="district">District</label>
+                    <input type="text" id="district" name="district" value="{{profile.district}}"
+                        placeholder="Enter district" required>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" value="{{profile.state}}" placeholder="Enter state"
+                        required>
+                </div>
+                <div class="col-md-6">
+                    <label for="pincode">Pincode</label>
+                    <input type="text" id="pincode" name="pincode" value="{{profile.pincode}}" placeholder="e.g. 400001"
+                        required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-modern w-100 mt-2">Save & Next</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

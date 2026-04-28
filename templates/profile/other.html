@@ -1,0 +1,36 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container py-2">
+    <div class="mx-auto mb-4" style="max-width: 700px;">
+        {% include 'profile/_stepper.html' with step=3 %}
+    </div>
+    <div class="glass-card p-4 p-md-5 mx-auto fade-in" style="max-width: 600px;">
+        <h2 class="text-center mb-3 fw-bold">Other Information</h2>
+        <p class="text-center text-muted-modern mb-4">Please provide your caste and income details.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <label for="caste">Caste Category</label>
+                    <select id="caste" name="caste" required>
+                        <option value="" disabled {% if not profile.caste %}selected{% endif %}>Select Caste</option>
+                        <option value="General" {% if profile.caste == 'General' %}selected{% endif %}>General</option>
+                        <option value="OBC" {% if profile.caste == 'OBC' %}selected{% endif %}>OBC</option>
+                        <option value="SC" {% if profile.caste == 'SC' %}selected{% endif %}>SC</option>
+                        <option value="ST" {% if profile.caste == 'ST' %}selected{% endif %}>ST</option>
+                        <option value="Other" {% if profile.caste == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="income">Annual Income (₹)</label>
+                    <input type="number" id="income" name="income" value="{{profile.income}}" placeholder="e.g. 150000" min="0" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-modern w-100 mt-2">Save & Next</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

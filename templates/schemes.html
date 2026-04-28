@@ -1,0 +1,39 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="fade-in">
+    <h2 class="fw-bold mb-4">Eligible Schemes</h2>
+
+    <div class="glass-card overflow-hidden">
+        <div class="table-responsive">
+            <table class="table mb-0 align-middle" style="--bs-table-bg: transparent;">
+                <thead style="background: #f5f5f7;">
+                    <tr>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider" style="border-bottom: 1px solid #d2d2d7;">Scheme Name</th>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider" style="border-bottom: 1px solid #d2d2d7;">Department</th>
+                        <th class="px-4 py-3 fw-semibold text-uppercase text-muted-modern small tracking-wider text-end" style="border-bottom: 1px solid #d2d2d7;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in schemes %}
+                    <tr>
+                        <td class="px-4 py-3 fw-medium" style="border-bottom: 1px solid #f0f0f0;">{{ s.name }}</td>
+                        <td class="px-4 py-3 text-muted-modern" style="border-bottom: 1px solid #f0f0f0;">{{ s.department }}</td>
+                        <td class="px-4 py-3 text-end" style="border-bottom: 1px solid #f0f0f0;">
+                            <a href="/apply/" class="btn btn-sm btn-modern rounded-pill px-4">Apply Now</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="px-4 py-5 text-center" style="border-bottom: none;">
+                            <div class="fs-1 opacity-50 mb-3">📄</div>
+                            <h5 class="fw-medium text-white">No Eligible Schemes Found</h5>
+                            <p class="text-muted-modern mb-0">Currently there are no schemes available based on your profile.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
