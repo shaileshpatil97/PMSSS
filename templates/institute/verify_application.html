@@ -1,29 +1,56 @@
-{% extends "layout/base.html" %}
+{% extends "layout/institute_base.html" %}
 {% block content %}
 
-<h4>Verify Application</h4>
-
-<div class="card p-3 mb-3">
-  <div><b>Student Aadhaar:</b> {{ app.student.aadhaar }}</div>
-  <div><b>Course:</b> {{ app.course }}</div>
-  <div><b>Institute:</b> {{ app.institute_name }}</div>
-  <div><b>Year:</b> {{ app.year }}</div>
-  <div><b>Current Status:</b> {{ app.status }}</div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0" style="font-size: 28px; letter-spacing: -0.02em;">Verify Application</h4>
 </div>
 
-<form method="post" class="card p-3">
-  {% csrf_token %}
+<div class="glass-card p-4 mb-4" style="border-radius: 20px;">
+    <h5 class="fw-bold mb-3">Student Details</h5>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <p class="text-muted-modern mb-1">Student Aadhaar</p>
+            <p class="fw-medium fs-5 m-0">{{ app.student.aadhaar }}</p>
+        </div>
+        <div class="col-md-6">
+            <p class="text-muted-modern mb-1">Course</p>
+            <p class="fw-medium fs-5 m-0">{{ app.course }}</p>
+        </div>
+        <div class="col-md-6">
+            <p class="text-muted-modern mb-1">Institute</p>
+            <p class="fw-medium fs-5 m-0">{{ app.institute_name }}</p>
+        </div>
+        <div class="col-md-6">
+            <p class="text-muted-modern mb-1">Year</p>
+            <p class="fw-medium fs-5 m-0">{{ app.year }}</p>
+        </div>
+        <div class="col-12 mt-3">
+            <span class="badge bg-secondary px-3 py-2" style="font-size: 14px;">Current Status: {{ app.status }}</span>
+        </div>
+    </div>
+</div>
 
-  <div class="mb-2">
-    <label class="form-label">Remarks (optional)</label>
-    <textarea class="form-control" name="remarks" rows="3">{% if verification %}{{ verification.remarks }}{% endif %}</textarea>
-  </div>
+<div class="glass-card p-4" style="border-radius: 20px;">
+    <h5 class="fw-bold mb-3">Verification Action</h5>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="form-label fw-medium text-muted-modern">Remarks (optional)</label>
+            <textarea class="form-control modern-input" name="remarks" rows="3" placeholder="Enter any remarks...">{% if verification %}{{ verification.remarks }}{% endif %}</textarea>
+        </div>
 
-  <div class="d-flex gap-2">
-    <button class="btn btn-success" name="action" value="verify">Verify</button>
-    <button class="btn btn-danger" name="action" value="reject">Reject</button>
-    <a class="btn btn-secondary" href="{% url 'institute_applications' %}">Back</a>
-  </div>
-</form>
+        <div class="d-flex gap-3">
+            <button class="btn btn-success px-4 py-2" name="action" value="verify" style="border-radius: 10px; font-weight: 500;">
+                <i class="me-1">✓</i> Verify Application
+            </button>
+            <button class="btn btn-danger px-4 py-2" name="action" value="reject" style="border-radius: 10px; font-weight: 500;">
+                <i class="me-1">✕</i> Reject Application
+            </button>
+            <a class="btn btn-outline-secondary px-4 py-2" href="{% url 'institute_applications' %}" style="border-radius: 10px; font-weight: 500;">
+                Back to List
+            </a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

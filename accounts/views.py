@@ -201,7 +201,20 @@ def profile_hostel(request):
 
 @login_required
 def student_home(request):
-    return render(request, "student_home.html")
+    profile = getattr(request.user, "studentprofile", None)
+    completeness_percentage = 0
+    if profile:
+        fields_to_check = [
+            profile.full_name, profile.dob, profile.gender, profile.mobile,
+            profile.email, profile.address, profile.district, profile.state,
+            profile.pincode, profile.caste, profile.income, profile.course,
+            profile.institute, profile.year, profile.last_qualification
+        ]
+        filled_fields = sum(1 for field in fields_to_check if field is not None and field != "")
+        total_fields = len(fields_to_check)
+        completeness_percentage = int((filled_fields / total_fields) * 100)
+
+    return render(request, "student_home.html", {"completeness_percentage": completeness_percentage})
 
 @login_required
 def my_applied(request):

@@ -1,62 +1,79 @@
-{% extends "layout/base.html" %}
+{% extends "layout/institute_base.html" %}
 {% block content %}
 
-<h4>Student Scholarship Tracking</h4>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0" style="font-size: 28px; letter-spacing: -0.02em;">Student Scholarship Tracking</h4>
+</div>
 
-<hr>
+<div class="glass-card p-4 mb-5" style="border-radius: 20px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="text-success fw-bold m-0">✅ Students Who Filled Scholarship Form</h5>
+        <div>
+            <a href="{% url 'upload_students' %}" class="btn btn-outline-primary ms-2" style="border-radius: 12px;">
+                Upload Students CSV
+            </a>
+        </div>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="border-0 rounded-start">Aadhaar</th>
+                    <th class="border-0">Name</th>
+                    <th class="border-0">Course</th>
+                    <th class="border-0 rounded-end">Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in filled_students %}
+                <tr>
+                    <td class="border-0">{{ s.aadhaar }}</td>
+                    <td class="border-0">{{ s.student_name }}</td>
+                    <td class="border-0">{{ s.course }}</td>
+                    <td class="border-0">{{ s.year }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted border-0">No students have filled the form yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<h5 class="text-success">✅ Students Who Filled Scholarship Form</h5>
-<a href="/institute/student-tracking/" class="btn btn-primary mt-3">
-    View Filled / Not Filled Students
-</a>
-<a href="{% url 'upload_students' %}" class="btn btn-primary">
-    Upload Students CSV
-</a>
-<table class="table table-bordered bg-white">
-    <tr>
-        <th>Aadhaar</th>
-        <th>Name</th>
-        <th>Course</th>
-        <th>Year</th>
-    </tr>
-    {% for s in filled_students %}
-    <tr>
-        <td>{{ s.aadhaar }}</td>
-        <td>{{ s.student_name }}</td>
-        <td>{{ s.course }}</td>
-        <td>{{ s.year }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="4">No students have filled the form yet.</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="glass-card p-4" style="border-radius: 20px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="text-danger fw-bold m-0">⏳ Students Who Have NOT Filled Scholarship Form</h5>
+    </div>
 
-<hr>
-
-<h5 class="text-danger">⏳ Students Who Have NOT Filled Scholarship Form</h5>
-
-<table class="table table-bordered bg-white">
-    <tr>
-        <th>Aadhaar</th>
-        <th>Name</th>
-        <th>Course</th>
-        <th>Year</th>
-    </tr>
-    {% for s in not_filled_students %}
-    <tr>
-        <td>{{ s.aadhaar }}</td>
-        <td>{{ s.student_name }}</td>
-        <td>{{ s.course }}</td>
-        <td>{{ s.year }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="4">All students have filled the form 🎉</td>
-    </tr>
-    {% endfor %}
-</table>
-
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="border-0 rounded-start">Aadhaar</th>
+                    <th class="border-0">Name</th>
+                    <th class="border-0">Course</th>
+                    <th class="border-0 rounded-end">Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in not_filled_students %}
+                <tr>
+                    <td class="border-0">{{ s.aadhaar }}</td>
+                    <td class="border-0">{{ s.student_name }}</td>
+                    <td class="border-0">{{ s.course }}</td>
+                    <td class="border-0">{{ s.year }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted border-0">All students have filled the form 🎉</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}
