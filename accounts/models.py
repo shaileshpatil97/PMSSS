@@ -61,3 +61,19 @@ class StudentProfile(models.Model):
 
     last_qualification = models.CharField(max_length=100, null=True)
     hostel = models.BooleanField(default=False)
+
+    # Documents
+    caste_cert_no = models.CharField(max_length=50, null=True, blank=True)
+    caste_cert = models.FileField(upload_to="documents/", null=True, blank=True)
+
+    caste_validity_cert_no = models.CharField(max_length=50, null=True, blank=True)
+    caste_validity_cert = models.FileField(upload_to="documents/", null=True, blank=True)
+
+    ncl_cert_no = models.CharField(max_length=50, null=True, blank=True)
+    ncl_cert = models.FileField(upload_to="documents/", null=True, blank=True)
+
+    domicile_cert_no = models.CharField(max_length=50, null=True, blank=True)
+    domicile_cert = models.FileField(upload_to="documents/", null=True, blank=True)
+
+    income_cert_no = models.CharField(max_length=50, null=True, blank=True)
+    income_cert = models.FileField(upload_to="documents/", null=True, blank=True)

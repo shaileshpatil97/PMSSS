@@ -1,0 +1,108 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container py-2">
+    <div class="mx-auto mb-4" style="max-width: 800px;">
+        {% include 'profile/_stepper.html' with step=7 %}
+    </div>
+    <div class="glass-card p-4 p-md-5 mx-auto fade-in" style="max-width: 800px;">
+        <h2 class="text-center mb-3 fw-bold">Upload Documents</h2>
+        <p class="text-center text-muted-modern mb-5">Please provide the certificate numbers and upload the corresponding documents.</p>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Caste Certificate -->
+            <div class="mb-4">
+                <h6 class="fw-bold mb-3 text-dark">Caste Certificate</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Certificate Number</label>
+                        <input type="text" name="caste_cert_no" class="form-control modern-input bg-light" value="{{ profile.caste_cert_no|default_if_none:'' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Upload File</label>
+                        <input type="file" name="caste_cert" class="form-control modern-input bg-light">
+                        {% if profile.caste_cert %}
+                            <small class="text-success mt-1 d-block">✓ Current: {{ profile.caste_cert.name }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caste Validity -->
+            <div class="mb-4">
+                <h6 class="fw-bold mb-3 text-dark">Caste Validity</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Certificate Number</label>
+                        <input type="text" name="caste_validity_cert_no" class="form-control modern-input bg-light" value="{{ profile.caste_validity_cert_no|default_if_none:'' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Upload File</label>
+                        <input type="file" name="caste_validity_cert" class="form-control modern-input bg-light">
+                        {% if profile.caste_validity_cert %}
+                            <small class="text-success mt-1 d-block">✓ Current: {{ profile.caste_validity_cert.name }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Non Creamy Layer -->
+            <div class="mb-4">
+                <h6 class="fw-bold mb-3 text-dark">Non Creamy Layer</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Certificate Number</label>
+                        <input type="text" name="ncl_cert_no" class="form-control modern-input bg-light" value="{{ profile.ncl_cert_no|default_if_none:'' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Upload File</label>
+                        <input type="file" name="ncl_cert" class="form-control modern-input bg-light">
+                        {% if profile.ncl_cert %}
+                            <small class="text-success mt-1 d-block">✓ Current: {{ profile.ncl_cert.name }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domicile Certificate -->
+            <div class="mb-4">
+                <h6 class="fw-bold mb-3 text-dark">Domicile</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Certificate Number</label>
+                        <input type="text" name="domicile_cert_no" class="form-control modern-input bg-light" value="{{ profile.domicile_cert_no|default_if_none:'' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Upload File</label>
+                        <input type="file" name="domicile_cert" class="form-control modern-input bg-light">
+                        {% if profile.domicile_cert %}
+                            <small class="text-success mt-1 d-block">✓ Current: {{ profile.domicile_cert.name }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Income Certificate -->
+            <div class="mb-5">
+                <h6 class="fw-bold mb-3 text-dark">Income Certificate</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Certificate Number</label>
+                        <input type="text" name="income_cert_no" class="form-control modern-input bg-light" value="{{ profile.income_cert_no|default_if_none:'' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted-modern fw-bold tracking-wide">Upload File</label>
+                        <input type="file" name="income_cert" class="form-control modern-input bg-light">
+                        {% if profile.income_cert %}
+                            <small class="text-success mt-1 d-block">✓ Current: {{ profile.income_cert.name }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-modern w-100 mt-2 py-3 fs-5">Finish Setup</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

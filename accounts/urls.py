@@ -13,6 +13,7 @@ urlpatterns = [
     path("student/profile/course/", views.profile_course, name="profile_course"),
     path("student/profile/qualification/", views.profile_qualification, name="profile_qualification"),
     path("student/profile/hostel/", views.profile_hostel, name="profile_hostel"),
+    path("student/profile/documents/", views.profile_documents, name="profile_documents"),
 
     # Schemes
     path("student/schemes/", views.all_schemes, name="all_schemes"),

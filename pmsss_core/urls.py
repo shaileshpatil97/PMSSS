@@ -32,8 +32,10 @@ urlpatterns = [
     path("institute/student-tracking/",institute_student_tracking,name="institute_student_tracking"),
     path("institute/applications/", institute_applications, name="institute_applications"),
     path("institute/applications/<uuid:application_id>/", institute_verify_application, name="institute_verify_application"),
-
-
-
-
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

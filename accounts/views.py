@@ -196,8 +196,33 @@ def profile_hostel(request):
     if request.method == "POST":
         profile.hostel = True if request.POST.get("hostel") else False
         profile.save()
-        return redirect("student_home")
+        return redirect("profile_documents")
     return render(request, "profile/hostel.html", {"profile": profile})
+
+@login_required
+def profile_documents(request):
+    profile = StudentProfile.objects.get(student=request.user)
+    if request.method == "POST":
+        profile.caste_cert_no = request.POST.get("caste_cert_no")
+        profile.caste_validity_cert_no = request.POST.get("caste_validity_cert_no")
+        profile.ncl_cert_no = request.POST.get("ncl_cert_no")
+        profile.domicile_cert_no = request.POST.get("domicile_cert_no")
+        profile.income_cert_no = request.POST.get("income_cert_no")
+
+        if "caste_cert" in request.FILES:
+            profile.caste_cert = request.FILES["caste_cert"]
+        if "caste_validity_cert" in request.FILES:
+            profile.caste_validity_cert = request.FILES["caste_validity_cert"]
+        if "ncl_cert" in request.FILES:
+            profile.ncl_cert = request.FILES["ncl_cert"]
+        if "domicile_cert" in request.FILES:
+            profile.domicile_cert = request.FILES["domicile_cert"]
+        if "income_cert" in request.FILES:
+            profile.income_cert = request.FILES["income_cert"]
+            
+        profile.save()
+        return redirect("student_home")
+    return render(request, "profile/documents.html", {"profile": profile})
 
 @login_required
 def student_home(request):
@@ -208,7 +233,12 @@ def student_home(request):
             profile.full_name, profile.dob, profile.gender, profile.mobile,
             profile.email, profile.address, profile.district, profile.state,
             profile.pincode, profile.caste, profile.income, profile.course,
-            profile.institute, profile.year, profile.last_qualification
+            profile.institute, profile.year, profile.last_qualification,
+            profile.caste_cert, profile.caste_cert_no,
+            profile.caste_validity_cert, profile.caste_validity_cert_no,
+            profile.ncl_cert, profile.ncl_cert_no,
+            profile.domicile_cert, profile.domicile_cert_no,
+            profile.income_cert, profile.income_cert_no
         ]
         filled_fields = sum(1 for field in fields_to_check if field is not None and field != "")
         total_fields = len(fields_to_check)
