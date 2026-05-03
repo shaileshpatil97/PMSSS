@@ -41,6 +41,7 @@ class ApplicationDocuments(models.Model):
     income_cert = models.CharField(max_length=50)
     caste_cert = models.CharField(max_length=50)
     domicile_cert = models.CharField(max_length=50)
+    non_creamy_layer_cert = models.CharField(max_length=50, blank=True, null=True)
     verified = models.BooleanField(default=False)
 
 

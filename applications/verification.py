@@ -20,7 +20,4 @@ def auto_verify(application, aadhaar):
     if appli.get("fraud"):
         return False, "Fraud flagged by AppliSarkar"
 
-    if appli.get("domicile") != "Jammu & Kashmir":
-        return False, "Invalid domicile"
-
     return True, digi

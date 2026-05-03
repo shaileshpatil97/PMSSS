@@ -25,6 +25,7 @@ def new_application(request):
                         "income_cert": payload.get("income", ""),
                         "caste_cert": payload.get("caste", ""),
                         "domicile_cert": payload.get("domicile", ""),
+                        "non_creamy_layer_cert": payload.get("non_creamy_layer", ""),
                         "verified": True,
                     },
                 )
