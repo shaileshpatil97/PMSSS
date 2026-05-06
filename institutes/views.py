@@ -66,11 +66,17 @@ def _get_institute_or_redirect(request):
 
     institute = Institute.objects.filter(user=request.user).first()
     if institute is None:
-        messages.error(
-            request,
-            "Institute profile not found. Please complete institute registration first.",
+        institute = Institute.objects.create(
+            user=request.user,
+            institute_code=f"INST-{request.user.aadhaar}",
+            institute_name="SSBT COET",
+            address="Pending Update",
+            district="Pending Update",
+            state="Pending Update",
+            contact_email="institute@example.com",
+            contact_phone="0000000000"
         )
-        return None, redirect("home")
+        messages.info(request, "Institute profile auto-created. Please update your details in the admin panel.")
 
     return institute, None
 
